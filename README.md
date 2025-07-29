@@ -23,3 +23,8 @@
 - **Lab 4.2**: [Run on EDA Playground](https://www.edaplayground.com/x/KqmB)
 - **Lab 4.3**: [Run on EDA Playground](https://www.edaplayground.com/x/REZ3)
 
+### Lab 5
+
+### Lab 6
+- **Lab 6.1**: [Run on EDA Playground](https://www.edaplayground.com/x/ZEBU)
+- **Lab 6.2**: [Run on EDA Playground](https://www.edaplayground.com/x/Uagm)
