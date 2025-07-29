@@ -17,3 +17,9 @@
 - **Lab 3.2**: [Run on EDA Playground](https://edaplayground.com/x/ZBPM)
 - **Lab 3.3**: [Run on EDA Playground](https://edaplayground.com/x/RHvG)
 
+### Lab 4
+
+- **Lab 4.1**: [Run on EDA Playground](https://www.edaplayground.com/x/bVMN)
+- **Lab 4.2**: [Run on EDA Playground](https://www.edaplayground.com/x/KqmB)
+- **Lab 4.3**: [Run on EDA Playground](https://www.edaplayground.com/x/REZ3)
+
