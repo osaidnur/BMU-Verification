@@ -32,3 +32,6 @@
 ### Lab 6
 - **Lab 6.1**: [Run on EDA Playground](https://www.edaplayground.com/x/ZEBU)
 - **Lab 6.2**: [Run on EDA Playground](https://www.edaplayground.com/x/Uagm)
+
+### Lab 7
+- **Lab 7**: [Run on EDA Playground](https://www.edaplayground.com/x/SzgF)
