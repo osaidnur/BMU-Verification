@@ -1,0 +1,42 @@
+class bmu_monitor extends uvm_monitor;
+
+`uvm_component_utils(bmu_monitor)
+
+virtual bmu_interface vif;
+uvm_analysis_port#(bmu_sequence_item) port;
+bmu_sequence_item packet;
+
+function new(string name = "bmu_monitor", uvm_component parent);
+  super.new(name, parent);
+  port = new("monitor_port",this);
+  packet = new();
+endfunction: new
+
+function void build_phase(uvm_phase phase); 
+    super.build_phase(phase);
+    if(!uvm_config_db#(virtual bmu_interface) :: get(this, "", "vif", vif)) 
+    `uvm_fatal(get_type_name(), "Not set at top level");
+endfunction
+
+task run_phase(uvm_phase phase);
+    forever begin
+        @(vif.monitor_cb);
+        packet.a_in = vif.monitor_cb.a_in;
+        packet.b_in = vif.monitor_cb.b_in;
+        packet.scan_mode = vif.monitor_cb.scan_mode;
+        packet.valid_in = vif.monitor_cb.valid_in;
+        packet.csr_ren_in = vif.monitor_cb.csr_ren_in;
+        packet.csr_rddata_in = vif.monitor_cb.csr_rddata_in;
+        packet.ap = vif.monitor_cb.ap;
+        packet.result_ff = vif.monitor_cb.result_ff;
+        packet.error = vif.monitor_cb.error;
+        
+        `uvm_info(get_type_name, $sformatf("[Monitor]: input signals sent to the DUT are: A = %0d, B = %0d, Opcode = %h", packet.a_in, packet.b_in, packet.opcode), UVM_HIGH);
+        packet.result = vif.monitor_cb.result;
+        packet.error = vif.monitor_cb.error;
+        `uvm_info(get_type_name, $sformatf("[Monitor]: the output signals received from the DUT are: Result = %d, Error = %b", packet.result, packet.error), UVM_HIGH);
+        // packet.print();
+        port.write(packet);
+    end
+endtask
+endclass
