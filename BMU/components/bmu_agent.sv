@@ -1,5 +1,6 @@
 class bmu_agent extends uvm_agent; 
 `uvm_component_utils(bmu_agent)
+
 bmu_driver driver;
 bmu_sequencer sequencer;
 bmu_monitor monitor;
