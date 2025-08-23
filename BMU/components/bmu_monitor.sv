@@ -28,13 +28,12 @@ task run_phase(uvm_phase phase);
         packet.csr_ren_in = vif.monitor_cb.csr_ren_in;
         packet.csr_rddata_in = vif.monitor_cb.csr_rddata_in;
         packet.ap = vif.monitor_cb.ap;
+        `uvm_info(get_type_name, $sformatf("[Monitor]: the input signals received from the DUT are: A = %d, B = %d, scan_mode = %b, valid_in = %b, csr_ren_in = %b, csr_rddata_in = %d, ap = %p", packet.a_in, packet.b_in, packet.scan_mode, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.ap), UVM_HIGH);
+        
         packet.result_ff = vif.monitor_cb.result_ff;
         packet.error = vif.monitor_cb.error;
-        
-        `uvm_info(get_type_name, $sformatf("[Monitor]: input signals sent to the DUT are: A = %0d, B = %0d, Opcode = %h", packet.a_in, packet.b_in, packet.opcode), UVM_HIGH);
-        packet.result = vif.monitor_cb.result;
-        packet.error = vif.monitor_cb.error;
-        `uvm_info(get_type_name, $sformatf("[Monitor]: the output signals received from the DUT are: Result = %d, Error = %b", packet.result, packet.error), UVM_HIGH);
+        `uvm_info(get_type_name, $sformatf("[Monitor]: the output signals received from the DUT are: result_ff = %d, error = %b", packet.result_ff, packet.error), UVM_HIGH);
+
         // packet.print();
         port.write(packet);
     end
