@@ -1,8 +1,8 @@
-class bmu_add_sequence extends uvm_sequence #(bmu_sequence_item);
+class bmu_rol_sequence extends uvm_sequence #(bmu_sequence_item);
 
-`uvm_object_utils(bmu_add_sequence)
+`uvm_object_utils(bmu_rol_sequence)
 
-function new(string name = "bmu_add_sequence");
+function new(string name = "bmu_rol_sequence");
   super.new(name);
 endfunction: new
 
@@ -13,25 +13,24 @@ task body();
     // Reset the DUT
     req.rst_l = 0;
     start_item(req);
-    `uvm_info(get_type_name(), "Reset the DUT - From add_sequence", UVM_NONE);
+    `uvm_info(get_type_name(), "Reset the DUT - From rol_sequence", UVM_NONE);
     finish_item(req);
     
     #10;
-    repeat(10)begin
+    
     // Randomize the inputs
-    req.randomize() with {
+    void'(req.randomize() with {
         rst_l == 1;
         scan_mode == 0;
         valid_in == 1;
         csr_ren_in == 0;
-    };
+    });
     
-    // Clear all AP bits and set only ADD
+    // Clear all AP bits and set only rol
     req.ap = 0;
-    req.ap.add = 1;
+    req.ap.rol = 1;
     start_item(req);
     finish_item(req);
-    end
     #10;
 
 
@@ -39,4 +38,4 @@ task body();
   
 endtask: body
 
-endclass: bmu_add_sequence
+endclass: bmu_rol_sequence
