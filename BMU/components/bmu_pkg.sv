@@ -29,6 +29,7 @@ package bmu_pkg;
   `include "bmu_environment.sv"
 
   `include "../tests/bmu_add_test.sv"
+  `include "../tests/bmu_and_test.sv"
 
   // `include "../tests/bmu_add_test.sv"
   // `include "../tests/bmu_and_test.sv"
