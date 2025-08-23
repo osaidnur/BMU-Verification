@@ -12,10 +12,8 @@ initial begin
     clk = 0;
     rst_l = 0;
     
-    #1;
+    #10;
     rst_l = 1;
-    #1;
-    rst_l = 0;
 end
 
 bmu_interface intf(clk,rst_l);
