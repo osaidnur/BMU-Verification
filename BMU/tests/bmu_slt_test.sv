@@ -1,8 +1,8 @@
-class bmu_add_test extends uvm_test;
-`uvm_component_utils(bmu_add_test)
+class bmu_slt_test extends uvm_test;
+`uvm_component_utils(bmu_slt_test)
 
 bmu_environment env;
-bmu_add_sequence bmu_sequence;
+bmu_slt_sequence bmu_sequence;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -15,9 +15,9 @@ endfunction
 
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
-    bmu_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
+    bmu_sequence = bmu_slt_sequence::type_id::create("bmu_slt_sequence");
     bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
-    `uvm_info(get_type_name, "========= End of ADD Test =========", UVM_LOW);
+    `uvm_info(get_type_name, "========= End of SLT Test =========", UVM_LOW);
 endtask
 endclass

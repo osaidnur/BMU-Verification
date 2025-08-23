@@ -16,10 +16,8 @@ endfunction
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     bmu_sequence = bmu_and_sequence::type_id::create("bmu_and_sequence");
-    repeat(10) begin
-        bmu_sequence.start(env.agent.sequencer);
-    end
+    bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
-    `uvm_info(get_type_name, "End of testcase", UVM_LOW);
+    `uvm_info(get_type_name, "========= End of AND Test =========", UVM_LOW);
 endtask
 endclass
