@@ -1,4 +1,4 @@
-class bmu_environment extends uvm_env; 
+class bmu_environment extends uvm_env;
 
 `uvm_component_utils(bmu_environment)
 
