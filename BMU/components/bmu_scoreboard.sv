@@ -27,6 +27,7 @@ task run_phase(uvm_phase phase);
     wait(packetQueue.size>0);
     packet = packetQueue.pop_front();
     // bmu_RF(packet.A,packet.B,packet.opcode, this.refPacket.result, this.refPacket.error); 
+    `uvm_info(get_type_name(), $sformatf("[Scoreboard]: Received: A=%0d, B=%0d, AP=%b, Result=%0d, Error=%0b", packet.a_in, packet.b_in, packet.ap, packet.result_ff, packet.error), UVM_LOW);
     packet.print();
     // if(is_equal(packet,this.refPacket)) begin 
     // `uvm_info("[Pass]", $sformatf("------ :: Match :: ------ "), UVM_LOW);  
