@@ -6,17 +6,18 @@
 COMP_DIR = components
 SEQ_DIR = sequences
 TEST_DIR = tests
+RTL_DIR = rtl
 
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-TEST_NAME = alu_add_test
+TEST_NAME = bmu_add_test
 VERBOSITY = UVM_NONE
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-# Only the essential files
-DESIGN_FILE = $(COMP_DIR)/ALU.sv
-INTERFACE_FILE = $(COMP_DIR)/alu_interface.sv
-PACKAGE_FILE = $(COMP_DIR)/alu_pkg.sv
-TB_FILE = $(COMP_DIR)/alu_tb.sv
+# Only the essential files for BMU
+DESIGN_FILE = $(COMP_DIR)/BMU.sv
+INTERFACE_FILE = $(COMP_DIR)/bmu_interface.sv 
+PACKAGE_FILE = $(COMP_DIR)/bmu_pkg.sv
+TB_FILE = $(COMP_DIR)/bmu_tb.sv
 
 # Simple file list - only 4 files instead of 20+!
 ALL_FILES = $(DESIGN_FILE) $(INTERFACE_FILE) $(PACKAGE_FILE) $(TB_FILE)
@@ -28,7 +29,7 @@ XRUN_FLAGS = -uvm -sv -access +rwc -coverage all -covwork coverage_db
 COV_FLAGS = -coverage all -covwork coverage_db
 
 # Include directories for relative paths in package
-INCDIR = +incdir+$(COMP_DIR)+$(SEQ_DIR)+$(TEST_DIR)
+INCDIR = +incdir+$(COMP_DIR)+$(SEQ_DIR)+$(TEST_DIR)+$(RTL_DIR)
 
 #######################################################################################
 # Endpoints
@@ -39,7 +40,7 @@ all: clean run_sim
 
 # Run simulation
 run_sim:
-	@echo "Running UVM ALU Simulation with test: $(TEST_NAME)"
+	@echo "Running UVM BMU Simulation with test: $(TEST_NAME)"
 	xrun $(XRUN_FLAGS) $(INCDIR) $(ALL_FILES) +UVM_TESTNAME=$(TEST_NAME) +UVM_VERBOSITY=$(VERBOSITY)
 
 # Run the test specified in run_test() method in the testbench
