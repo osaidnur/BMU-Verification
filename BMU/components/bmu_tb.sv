@@ -10,17 +10,17 @@ always #5 clk = ~clk;
 
 initial begin
     clk = 0;
-    rst = 0;
+    rst_l = 0;
     
     #1;
-    rst = 1;
+    rst_l = 1;
     #1;
-    rst = 0;
+    rst_l = 0;
 end
 
 bmu_interface intf(clk,rst_l);
 
-bmu dut (
+BMU dut (
 .clk(clk),
 .rst_l(rst_l),
 .scan_mode(intf.scan_mode),
@@ -40,7 +40,7 @@ initial begin
 end
 
 initial begin
-    run_test("bmu_and_test");
+    run_test("bmu_add_test");
 end
 
 // initial begin
