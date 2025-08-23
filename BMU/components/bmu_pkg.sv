@@ -7,6 +7,8 @@ package bmu_pkg;
   `include "bmu_sequence_item.sv"
   
   // Include sequences (they depend on sequence_item)
+  `include "../sequences/bmu_add_sequence.sv"
+  `include "../sequences/bmu_and_sequence.sv"
   // `include "../sequences/bmu_add_sequence.sv"
   // `include "../sequences/bmu_sub_sequence.sv"
   // `include "../sequences/bmu_or_sequence.sv"
@@ -25,6 +27,8 @@ package bmu_pkg;
   `include "bmu_subscriber.sv"
   `include "bmu_scoreboard.sv"
   `include "bmu_environment.sv"
+
+  `include "../tests/bmu_add_test.sv"
 
   // `include "../tests/bmu_add_test.sv"
   // `include "../tests/bmu_and_test.sv"
