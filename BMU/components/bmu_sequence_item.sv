@@ -8,36 +8,30 @@ rand logic valid_in ;
 rand logic csr_ren_in;
 rand logic [31:0] csr_rddata_in ;
 
-rand struct ap {
+rand struct packed {
   logic csr_write;
   logic csr_imm;
-
   logic zbb;
   logic zbp;
   logic zba;
   logic zbs;
-
   logic land;
   logic lxor;
-
   logic sll;
   logic sra;
   logic rol;
   logic bext;
-
   logic sh3add;
-
   logic add;
   logic slt;
   logic sub;
-
   logic clz;
   logic cpop;
   logic siext_h;
   logic min;
   logic packu;
   logic gorc;
-} ;
+} ap;
 
 // outputs
 logic signed [31:0] result_ff;
