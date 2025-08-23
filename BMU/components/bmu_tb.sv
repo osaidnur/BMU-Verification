@@ -21,17 +21,17 @@ end
 bmu_interface intf(clk,rst_l);
 
 BMU dut (
-.clk(clk),
-.rst_l(rst_l),
-.scan_mode(intf.scan_mode),
-.valid_in(intf.valid_in),
-.csr_ren_in(intf.csr_ren_in),
-.csr_rddata_in(intf.csr_rddata_in),
-.a_in(intf.a_in),
-.b_in(intf.b_in),
-.ap(intf.ap),
-.result_ff(intf.result_ff),
-.error(intf.error)
+    .clk(clk),
+    .rst_l(rst_l),
+    .scan_mode(intf.scan_mode),
+    .valid_in(intf.valid_in),
+    .csr_ren_in(intf.csr_ren_in),
+    .csr_rddata_in(intf.csr_rddata_in),
+    .a_in(intf.a_in),
+    .b_in(intf.b_in),
+    .ap(intf.ap),
+    .result_ff(intf.result_ff),
+    .error(intf.error)
 );
 
 initial begin
