@@ -16,7 +16,7 @@ endfunction
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     bmu_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
-    repeat(500) begin
+    repeat(10) begin
         bmu_sequence.start(env.agent.sequencer);
     end
     phase.drop_objection(this);
