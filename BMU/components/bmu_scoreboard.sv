@@ -53,7 +53,7 @@ function void doo_print(bmu_sequence_item packet);
     // Format the output based on number of active signals
     if (active_signals.size() == 0) begin
         signal_info = "No active signals";
-    end else if (active_signals.size() == 1) begin
+    end else if (active_signals.size() <=2) begin
         signal_info = $sformatf("Active signal: %s", active_signals[0]);
     end else begin
         signal_info = $sformatf("Multiple active signals (%0d): ", active_signals.size());
