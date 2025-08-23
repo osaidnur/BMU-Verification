@@ -83,7 +83,7 @@ module BMU (
         else if (!is_single_op_active()) begin
             result_next = 32'h0;
             error_next = 1'b0; // Error: Multiple or no operation signals active
-            `uvm_info("BMU", "Error: Multiple or no operation signals active", UVM_LOW);
+            // `uvm_info("BMU", "Error: Multiple or no operation signals active", UVM_LOW);
         end
         // Addition operation
         else if (ap.add) begin
