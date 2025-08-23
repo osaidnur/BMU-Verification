@@ -32,7 +32,6 @@ task drive();
   vif.driver_cb.valid_in <= req.valid_in;
   vif.driver_cb.csr_ren_in <= req.csr_ren_in;
   vif.driver_cb.csr_rddata_in <= req.csr_rddata_in;
-
 endtask
 
 endclass
