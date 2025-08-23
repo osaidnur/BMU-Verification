@@ -19,18 +19,20 @@ task body();
     #10;
     
     // Randomize the inputs
-    req.randomize() with {
-        ap == 0;
+    void'(req.randomize() with {
         rst_l == 1;
         scan_mode == 0;
         valid_in == 1;
         csr_ren_in == 0;
-    };
+    });
+    
+    // Clear all AP bits and set only ADD
+    req.ap = 0;
     req.ap.add = 1;
     start_item(req);
     finish_item(req);
     #10;
-    
+
 
   
   

@@ -20,13 +20,15 @@ task body();
     
     // Randomize the inputs
     req.randomize() with {
-        ap == 0;
         rst_l == 1;
         scan_mode == 0;
         valid_in == 1;
         csr_ren_in == 0;
     };
-    req.ap.and = 1;
+    
+    // Clear all AP bits and set only LAND (logical AND)
+    req.ap = 0;
+    req.ap.land = 1;
     start_item(req);
     finish_item(req);
     #10;
