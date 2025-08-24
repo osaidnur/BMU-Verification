@@ -3,8 +3,8 @@ class bmu_regression_test extends uvm_test;
 
 bmu_environment env;
 
-bmu_add_sequence and_sequence;
-bmu_and_sequence add_sequence;
+bmu_add_sequence add_sequence;
+bmu_and_sequence and_sequence;
 bmu_bext_sequence bext_sequence;
 bmu_clz_sequence clz_sequence;
 bmu_cpop_sequence cpop_sequence;
