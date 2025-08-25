@@ -1,8 +1,9 @@
-interface bmu_interface(input logic clk, rst_l); 
+interface bmu_interface(input logic clk); 
 
 // Input and output signals 
 logic signed [31:0] a_in; // Operand 1
 logic signed [31:0] b_in; // Operand 2 
+logic rst_l ;
 logic scan_mode ;
 logic valid_in ;
 logic csr_ren_in;
@@ -44,8 +45,9 @@ struct packed {
 logic [31:0] result_ff; // Output result 
 logic error; // Error flag for overflow
 
-clocking driver_cb @(negedge clk);
+clocking driver_cb @(posedge clk);
   default input #1 output #0;
+  output rst_l;
   output a_in;
   output b_in;
   output scan_mode;
@@ -57,6 +59,7 @@ endclocking
 
 clocking monitor_cb @(posedge clk); 
   default input #0 output #1; 
+  input rst_l;
   input a_in;
   input b_in;
   input scan_mode;

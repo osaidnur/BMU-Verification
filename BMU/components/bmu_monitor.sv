@@ -23,6 +23,7 @@ task run_phase(uvm_phase phase);
         @(vif.monitor_cb);
         packet.a_in = vif.monitor_cb.a_in;
         packet.b_in = vif.monitor_cb.b_in;
+        packet.rst_l = vif.monitor_cb.rst_l;
         packet.scan_mode = vif.monitor_cb.scan_mode;
         packet.valid_in = vif.monitor_cb.valid_in;
         packet.csr_ren_in = vif.monitor_cb.csr_ren_in;
