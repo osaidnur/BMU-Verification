@@ -16,6 +16,7 @@ endfunction
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     bmu_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
+    `uvm_info(get_type_name, "========= Starting ADD Test =========", UVM_LOW);
     bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of ADD Test =========", UVM_LOW);
