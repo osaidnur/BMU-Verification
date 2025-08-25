@@ -25,6 +25,7 @@ endtask
 
 task drive();
   @(vif.driver_cb);
+  vif.driver_cb.rst_l <= req.rst_l;
   vif.driver_cb.a_in <= req.a_in;
   vif.driver_cb.b_in <= req.b_in;
   vif.driver_cb.ap <= req.ap;
