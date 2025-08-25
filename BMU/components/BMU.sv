@@ -108,6 +108,10 @@ module BMU (
             result_next = a_in & b_in;
             error_next = 1'b0;
         end
+        else if(ap.land && ap.zbb) begin
+            result_next = a_in & ~b_in;
+            error_next = 1'b0;
+        end
         // Logical XOR
         else if (ap.lxor) begin
             result_next = a_in ^ b_in;
