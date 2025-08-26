@@ -15,7 +15,7 @@ function void build_phase(uvm_phase phase);
 endfunction
 
 task run_phase(uvm_phase phase);
-forever begin 
+forever begin
     seq_item_port.get_next_item(req);
     drive();
     `uvm_info("Driver ", $sformatf("Driving: A=%0d, B=%0d, AP=%b", req.a_in, req.b_in, req.ap), UVM_HIGH);
@@ -24,6 +24,7 @@ end
 endtask
 
 task drive();
+  // @(posedge vif.driver_mod.clk); -> sample directly at clock edge
   @(vif.driver_cb);
   vif.driver_cb.rst_l <= req.rst_l;
   vif.driver_cb.a_in <= req.a_in;

@@ -20,6 +20,7 @@ endfunction
 
 task run_phase(uvm_phase phase);
     forever begin
+        // @(posedge vif.driver_mod.clk); -> sample directly at clock edge
         @(vif.monitor_cb);
         packet.a_in = vif.monitor_cb.a_in;
         packet.b_in = vif.monitor_cb.b_in;
