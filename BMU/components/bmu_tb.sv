@@ -5,14 +5,20 @@ import bmu_pkg::*;  // Import our package with all UVM components
 module bmu_tb;
 logic clk;
 
-always #5 clk = ~clk;
+// always #5 clk = ~clk;
 
 initial begin
     clk = 0;
-    // rst_l = 0;
+    // intf.rst_l = 1;
+
+    forever begin
+        #5 clk = ~clk;
+    end
     
-    // #10;
-    // rst_l = 1;
+    // #20;
+    // intf.rst_l = 1;
+
+    // #10 intf.rst_l = 0;
 end
 
 bmu_interface intf(clk);
