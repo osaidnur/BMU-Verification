@@ -26,8 +26,8 @@ package bmu_pkg;
 
   // Include components (they depend on sequence_item and sequences)
   `include "bmu_sequencer.sv"
-  `include "bmu_monitor.sv"
   `include "bmu_driver.sv"
+  `include "bmu_monitor.sv"
   `include "bmu_agent.sv"
   `include "bmu_subscriber.sv"
   `include "bmu_scoreboard.sv"
