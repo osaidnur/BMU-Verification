@@ -210,7 +210,7 @@ task body();
     start_item(req);
     finish_item(req);
     
-    #5;
+    // #5;
     
     // Directed Test 2: AND operation with all bits set to 0
     `uvm_info(get_type_name(), "[Directed Test 2]: AND with all bits set to 0", UVM_LOW);
@@ -225,7 +225,7 @@ task body();
     start_item(req);
     finish_item(req);
     
-    #5;
+    // #5;
     // Directed Test 3: AND operation when one operand is zeros and the other is ones
     `uvm_info(get_type_name(), "[Directed Test 3]: AND with one operand as 0s and the other as 1s", UVM_LOW);
     // req.rst_l = 1;
@@ -291,6 +291,19 @@ task body();
     req.ap.land = 1;
     start_item(req);
     finish_item(req);
+
+
+    // Add idle cycles to ensure all transactions from previous test are completed
+    repeat(1) begin
+      start_item(req);
+      req.rst_l = 1;
+      req.scan_mode = 0;
+      req.valid_in = 0;  // No valid transaction - idle cycle
+      req.csr_ren_in = 0;
+      req.ap = 0;
+      finish_item(req);
+    end
+    
 
     
   
