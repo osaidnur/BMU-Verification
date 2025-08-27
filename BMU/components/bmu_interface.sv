@@ -46,7 +46,7 @@ logic [31:0] result_ff; // Output result
 logic error; // Error flag for overflow
 
 clocking driver_cb @(posedge clk);
-  default input #1 output #0;
+  // default input #2step output #1step;
   output rst_l;
   output a_in;
   output b_in;
@@ -58,7 +58,7 @@ clocking driver_cb @(posedge clk);
 endclocking
 
 clocking monitor_cb @(posedge clk); 
-  default input #0 output #1; 
+  // default input #5step output #1step; 
   input rst_l;
   input a_in;
   input b_in;
