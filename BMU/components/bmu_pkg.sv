@@ -7,6 +7,7 @@ package bmu_pkg;
   `include "bmu_sequence_item.sv"
   
   // Include sequences (they depend on sequence_item)
+  `include "../sequences/bmu_reset_sequence.sv"
   `include "../sequences/bmu_add_sequence.sv"
   `include "../sequences/bmu_and_sequence.sv"
   `include "../sequences/bmu_bext_sequence.sv"
