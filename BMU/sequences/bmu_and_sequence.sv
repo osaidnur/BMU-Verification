@@ -6,39 +6,170 @@ function new(string name = "bmu_and_sequence");
   super.new(name);
 endfunction: new
 
+
+
+
+// virtual task body();  // Behavior of the sequence
+
+//     repeat (1) begin  // Continue generating trs
+
+//       transaction tr = transaction::type_id::create(
+//           "tr"
+//       );  // New tr
+
+      
+//       // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+//       repeat (1) begin
+//         tr.randomize(); // this is used to avoid getting an unknown value.
+//         tr.rst_l = 1'b1;
+//         tr.scan_mode = 1'b0;
+//         tr.ap.clz = 1'b0;
+//         tr.ap.ctz = 1'b0;
+//         tr.ap.cpop = 1'b0;
+//         tr.ap.siext_b = 1'b0;
+//         tr.ap.siext_h = 1'b0;
+//         tr.ap.min = 1'b0;
+//         tr.ap.max = 1'b0;
+//         tr.ap.pack = 1'b0;
+//         tr.ap.packu = 1'b0;
+//         tr.ap.packh = 1'b0;
+//         tr.ap.rol = 1'b0;
+//         tr.ap.ror = 1'b0;
+//         tr.ap.grev = 1'b0;
+//         tr.ap.gorc = 1'b0;
+//         tr.ap.zbb = 1'b0;
+//         tr.ap.bset = 1'b0;
+//         tr.ap.bclr = 1'b0;
+//         tr.ap.binv = 1'b0;
+//         tr.ap.bext = 1'b0;
+//         tr.ap.sh1add = 1'b0;
+//         tr.ap.sh2add = 1'b0;
+//         tr.ap.sh3add = 1'b0;
+//         tr.ap.zba = 1'b0;
+//         tr.ap.land = 1'b1;
+//         tr.ap.lor = 1'b0;
+//         tr.ap.lxor = 1'b0;
+//         tr.ap.sll = 1'b0;
+//         tr.ap.srl = 1'b0;
+//         tr.ap.sra = 1'b0;
+//         tr.ap.beq = 1'b0;
+//         tr.ap.bne = 1'b0;
+//         tr.ap.blt = 1'b0;
+//         tr.ap.bge = 1'b0;
+//         tr.ap.add = 1'b0;
+//         tr.ap.sub = 1'b0;
+//         tr.ap.slt = 1'b0;
+//         tr.ap.unsign = 1'b0;
+//         tr.ap.jal = 1'b0;
+//         tr.ap.predict_t = 1'b0;
+//         tr.ap.predict_nt = 1'b0;
+//         tr.ap.csr_write = 1'b0;
+//         tr.ap.csr_imm = 1'b0;
+//         tr.csr_ren_in = 1'b1; 
+//         tr.csr_rddata_in = 32'h00AF; 
+//         tr.valid_in = 1'b1; 
+//         // tr.a_in = 'hFFFF_0101; 
+//         // tr.b_in = 'h1234_AA00; 
+//         tr.a_in = 'hF0F0_F0F0; 
+//         tr.b_in = 'h0F0F_0F0F; 
+//         start_item(tr);
+//         `uvm_info(get_type_name(), (" IIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIII "),UVM_NONE)
+//         `uvm_info(get_type_name(), (" IIIIIIIIIIIIIIIIIII bit_manipluation_and_seq to DUT IIIIIIIIIIIIIIIIIII "),UVM_NONE)
+//         `uvm_info(get_type_name(), (" IIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIIIIIIIIIIIII IIIIIIIIIIIIIIIIIII "),UVM_NONE)
+//         finish_item(tr);
+
+//         start_item(tr);
+//           tr.randomize();
+//           tr.ap = 'h0;
+//           tr.valid_in = 1'b1;
+//           tr.csr_ren_in= 1'b0;
+//           tr.rst_l = 1'b1;
+//         finish_item(tr);
+
+//         start_item(tr);
+//         finish_item(tr);
+//         start_item(tr);
+//         finish_item(tr);
+//         start_item(tr);
+//         finish_item(tr);
+//         start_item(tr);
+//         finish_item(tr);
+//         start_item(tr);
+//         finish_item(tr);
+
+//         repeat(120)
+//         begin
+//         start_item(tr);
+//             tr.randomize();
+//             tr.valid_in = 1'b1;
+//             tr.csr_ren_in = 1'b0;
+//             tr.ap  = 'h0 ; 
+//             tr.ap.land = 1'b1;
+//             tr.rst_l = 1'b1;
+//         finish_item(tr);
+//         end
+
+//         repeat(120)
+//         begin
+//         start_item(tr);
+//             tr.randomize();
+//             tr.valid_in = 1'b1;
+//             tr.csr_ren_in = 1'b0;
+//             tr.ap  = 'h0 ; 
+//             tr.ap.land = 1'b1;
+//             tr.rst_l = 1'b1;
+//             tr.ap.zbb = 1'b1;
+//         finish_item(tr);
+//         end
+
+
+//       end
+//     end
+
+//   endtask
+
+
+
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-    
-    // Reset the DUT
-    req.rst_l = 0;
-    start_item(req);
-    `uvm_info(get_type_name(), "Reset the DUT", UVM_NONE);
-    finish_item(req);
-    
+      
     // ==================== Randomized Testing ===================
-    
+    // #10; // Small delay after reset sequence
     `uvm_info(get_type_name(), "[Randomized Tests 1] Normal AND operation", UVM_LOW);
     // Normal AND operations
     repeat(10)begin
-    
+      start_item(req);
       req.randomize() with {
           rst_l == 1;
           scan_mode == 0;
           valid_in == 1;
           csr_ren_in == 0;
       };
-      
       req.ap = 0;
       req.ap.land = 1;
-      start_item(req);
       finish_item(req);
     end
+    
+    // Add idle cycles to ensure all transactions from previous test are completed
+    repeat(1) begin
+      start_item(req);
+      req.rst_l = 1;
+      req.scan_mode = 0;
+      req.valid_in = 0;  // No valid transaction - idle cycle
+      req.csr_ren_in = 0;
+      req.ap = 0;
+      finish_item(req);
+    end
+    
+    
+    // Small delay to ensure all results are captured before moving to next test
+    // #10;
 
     `uvm_info(get_type_name(), "[Randomized Tests 2] Inverted AND operation", UVM_LOW);
     // Inverted AND operations (A & ~B)
     repeat(10)begin
-      
+      start_item(req);
       req.randomize() with {
           rst_l == 1;
           scan_mode == 0;
@@ -49,10 +180,21 @@ task body();
       req.ap = 0;
       req.ap.land = 1;
       req.ap.zbb = 1;
-      start_item(req);
+      
       finish_item(req);
     end
 
+    // Add idle cycles to ensure all transactions from previous test are completed
+    repeat(1) begin
+      start_item(req);
+      req.rst_l = 1;
+      req.scan_mode = 0;
+      req.valid_in = 0;  // No valid transaction - idle cycle
+      req.csr_ren_in = 0;
+      req.ap = 0;
+      finish_item(req);
+    end
+    
     // ==================== Directed Testing ===================
 
     // Directed Test 1: AND operation with all bits set to 1
@@ -68,6 +210,8 @@ task body();
     start_item(req);
     finish_item(req);
     
+    #5;
+    
     // Directed Test 2: AND operation with all bits set to 0
     `uvm_info(get_type_name(), "[Directed Test 2]: AND with all bits set to 0", UVM_LOW);
     // req.rst_l = 1;
@@ -80,7 +224,8 @@ task body();
     req.ap.land = 1;
     start_item(req);
     finish_item(req);
-
+    
+    #5;
     // Directed Test 3: AND operation when one operand is zeros and the other is ones
     `uvm_info(get_type_name(), "[Directed Test 3]: AND with one operand as 0s and the other as 1s", UVM_LOW);
     // req.rst_l = 1;
