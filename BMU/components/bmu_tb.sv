@@ -5,26 +5,19 @@ import bmu_pkg::*;  // Import our package with all UVM components
 module bmu_tb;
 logic clk;
 
-// always #5 clk = ~clk;
-
 initial begin
     clk = 0;
-    // intf.rst_l = 1;
-
+    // #5;
     forever begin
-        #5 clk = ~clk;
+       #5 clk = ~clk; 
     end
-    
-    // #20;
-    // intf.rst_l = 1;
 
-    // #10 intf.rst_l = 0;
 end
 
 bmu_interface intf(clk);
 
 BMU dut (
-    .clk(clk),
+    .clk(intf.clk),
     .rst_l(intf.rst_l),
     .scan_mode(intf.scan_mode),
     .valid_in(intf.valid_in),
@@ -38,7 +31,7 @@ BMU dut (
 );
 
 initial begin
-// set interface in config_db
+    // set interface in config_db
     uvm_config_db#(virtual bmu_interface)::set(uvm_root::get(), "*", "vif", intf);
 end
 
