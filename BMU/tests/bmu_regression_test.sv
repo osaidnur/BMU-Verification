@@ -18,6 +18,7 @@ bmu_sll_sequence sll_sequence;
 bmu_slt_sequence slt_sequence;
 bmu_sra_sequence sra_sequence;
 bmu_xor_sequence xor_sequence;
+bmu_reset_sequence reset_seq;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -45,21 +46,38 @@ task run_phase(uvm_phase phase);
     slt_sequence = bmu_slt_sequence::type_id::create("bmu_slt_sequence");
     sra_sequence = bmu_sra_sequence::type_id::create("bmu_sra_sequence");
     xor_sequence = bmu_xor_sequence::type_id::create("bmu_xor_sequence");
-    
+    reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
+
+    reset_seq.start(env.agent.sequencer);
+    # 10;
     add_sequence.start(env.agent.sequencer);
+    # 10;
     and_sequence.start(env.agent.sequencer);
+    # 10;
     bext_sequence.start(env.agent.sequencer);
+    # 10;
     clz_sequence.start(env.agent.sequencer);
+    # 10;
     cpop_sequence.start(env.agent.sequencer);
+    # 10;
     gorc_sequence.start(env.agent.sequencer);
+    # 10;
     min_sequence.start(env.agent.sequencer);
+    # 10;
     packu_sequence.start(env.agent.sequencer);
+    # 10;
     rol_sequence.start(env.agent.sequencer);
+    # 10;
     sh3add_sequence.start(env.agent.sequencer);
+    # 10;
     siext_h_sequence.start(env.agent.sequencer);
+    # 10;
     sll_sequence.start(env.agent.sequencer);
+    # 10;
     slt_sequence.start(env.agent.sequencer);
+    # 10;
     sra_sequence.start(env.agent.sequencer);
+    # 10;
     xor_sequence.start(env.agent.sequencer);
 
     phase.drop_objection(this);

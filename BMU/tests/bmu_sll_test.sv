@@ -3,6 +3,7 @@ class bmu_sll_test extends uvm_test;
 
 bmu_environment env;
 bmu_sll_sequence bmu_sequence;
+bmu_reset_sequence reset_seq;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -16,6 +17,9 @@ endfunction
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     bmu_sequence = bmu_sll_sequence::type_id::create("bmu_sll_sequence");
+    reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
+    reset_seq.start(env.agent.sequencer);
+    # 10;
     bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of SLL Test =========", UVM_LOW);
