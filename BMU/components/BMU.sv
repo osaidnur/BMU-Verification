@@ -80,11 +80,11 @@ module BMU (
             error_next = 1'b0;
         end
         // Check if only one operation signal is active
-        else if (!is_single_op_active()) begin
-            result_next = 32'h0;
-            error_next = 1'b0; // Error: Multiple or no operation signals active
-            // `uvm_info("BMU", "Error: Multiple or no operation signals active", UVM_LOW);
-        end
+        // else if (!is_single_op_active()) begin
+        //     result_next = 32'h0;
+        //     error_next = 1'b0; // Error: Multiple or no operation signals active
+        //     // `uvm_info("BMU", "Error: Multiple or no operation signals active", UVM_LOW);
+        // end
         // Addition operation
         else if (ap.add) begin
             add_result_extended = {a_in[31], a_in} + {b_in[31], b_in};
@@ -149,7 +149,7 @@ module BMU (
         if (!rst_l) begin
             result_ff <= 32'h0;
             error <= 1'b0;
-            $display("[%0t] BMU: Reset asserted - result_ff <= 0, error <= 0", $time);
+            // $display("[%0t] BMU: Reset asserted - result_ff <= 0, error <= 0", $time);
         end else begin
             result_ff <= result_next;
             error <= error_next;
