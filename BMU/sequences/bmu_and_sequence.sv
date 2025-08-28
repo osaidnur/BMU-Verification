@@ -140,12 +140,12 @@ task body();
     // Normal AND operations
     repeat(10)begin
       start_item(req);
-      req.randomize() with {
+      void'(req.randomize() with {
           rst_l == 1;
           scan_mode == 0;
           valid_in == 1;
           csr_ren_in == 0;
-      };
+      });
       req.ap = 0;
       req.ap.land = 1;
       finish_item(req);
@@ -170,12 +170,12 @@ task body();
     // Inverted AND operations (A & ~B)
     repeat(10)begin
       start_item(req);
-      req.randomize() with {
+      void'(req.randomize() with {
           rst_l == 1;
           scan_mode == 0;
           valid_in == 1;
           csr_ren_in == 0;
-      };
+      });
       
       req.ap = 0;
       req.ap.land = 1;
