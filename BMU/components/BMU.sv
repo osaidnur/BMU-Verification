@@ -127,6 +127,11 @@ module BMU (
             result_next = a_in >>> b_in[4:0]; // Arithmetic right shift
             error_next = 1'b0;
         end
+        else if (ap.bext) begin
+            // Extract a_in[b_in[4:0]] into the LSB, zero-extend the rest
+            result_next = {31'd0, a_in[b_in[4:0]]};
+            error_next  = 1'b0;
+        end
         // Set less than
         else if (ap.slt) begin
             result_next = (a_in < b_in) ? 32'h1 : 32'h0;
