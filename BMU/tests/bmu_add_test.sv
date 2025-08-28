@@ -3,6 +3,7 @@ class bmu_add_test extends uvm_test;
 
 bmu_environment env;
 bmu_add_sequence bmu_sequence;
+bmu_reset_sequence reset_seq;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -16,10 +17,11 @@ endfunction
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     bmu_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
-    repeat(10) begin
-        bmu_sequence.start(env.agent.sequencer);
-    end
+    reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
+    reset_seq.start(env.agent.sequencer);
+    # 10;
+    bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
-    `uvm_info(get_type_name, "End of testcase", UVM_LOW);
+    `uvm_info(get_type_name, "========= End of ADD Test =========", UVM_LOW);
 endtask
 endclass

@@ -1,26 +1,24 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 import bmu_pkg::*;  // Import our package with all UVM components
-  
+
 module bmu_tb;
 logic clk;
-logic rst_l;
-
-always #5 clk = ~clk;
 
 initial begin
     clk = 0;
-    rst_l = 0;
-    
-    #10;
-    rst_l = 1;
+    // #5;
+    forever begin
+       #5 clk = ~clk; 
+    end
+
 end
 
-bmu_interface intf(clk,rst_l);
+bmu_interface intf(clk);
 
 BMU dut (
-    .clk(clk),
-    .rst_l(rst_l),
+    .clk(intf.clk),
+    .rst_l(intf.rst_l),
     .scan_mode(intf.scan_mode),
     .valid_in(intf.valid_in),
     .csr_ren_in(intf.csr_ren_in),
@@ -33,7 +31,7 @@ BMU dut (
 );
 
 initial begin
-// set interface in config_db
+    // set interface in config_db
     uvm_config_db#(virtual bmu_interface)::set(uvm_root::get(), "*", "vif", intf);
 end
 
