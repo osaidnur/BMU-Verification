@@ -61,7 +61,7 @@ function void doo_print(bmu_sequence_item packet);
         end
     end
     
-    `uvm_info("Scoreboard", $sformatf("A=%0d, B=%0d, %s, Result=%0d, Error=%0b", 
+    `uvm_info("Scoreboard", $sformatf("A=%0h, B=%0d, %s, Result=%0h, Error=%0b", 
               packet.a_in, packet.b_in, signal_info, packet.result_ff, packet.error), UVM_LOW);
 endfunction
 
