@@ -149,6 +149,24 @@ module BMU (
             result_next = (a_in < b_in) ? a_in : b_in;
             error_next = 1'b0;
         end
+        // Count Leading Zeros
+        else if (ap.clz) begin
+            if (a_in == 32'h0) begin
+                // Special case: when input is all zeros, output is 0
+                result_next = 32'h0;
+            end else begin
+                // Count leading zeros from MSB
+                result_next = 32'h0;
+                for (int i = 31; i >= 0; i--) begin
+                    if (a_in[i] == 1'b0) begin
+                        result_next = result_next + 1;
+                    end else begin
+                        break; // Stop counting when we find the first 1
+                    end
+                end
+            end
+            error_next = 1'b0;
+        end
         // Default case - no valid operation or unimplemented operation
         else begin
             result_next = 32'h0;
