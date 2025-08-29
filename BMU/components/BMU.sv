@@ -25,6 +25,7 @@ module BMU (
         logic sh3add;
         logic add;
         logic slt;
+        logic unsign;
         logic sub;
         logic clz;
         logic cpop;
@@ -134,7 +135,13 @@ module BMU (
         end
         // Set less than
         else if (ap.slt) begin
-            result_next = (a_in < b_in) ? 32'h1 : 32'h0;
+            if (ap.unsign) begin
+                // Unsigned comparison: treat both operands as unsigned
+                result_next = ($unsigned(a_in) < $unsigned(b_in)) ? 32'h1 : 32'h0;
+            end else begin
+                // Signed comparison: treat both operands as signed (default)
+                result_next = ($signed(a_in) < $signed(b_in)) ? 32'h1 : 32'h0;
+            end
             error_next = 1'b0;
         end
         // Minimum
