@@ -31,6 +31,7 @@ struct packed {
 
   logic add;
   logic slt;
+  logic unsign;
   logic sub;
 
   logic clz;
