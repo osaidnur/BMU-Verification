@@ -26,6 +26,7 @@ task body();
       });
       req.ap = 0;
       req.ap.min = 1;
+      req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
 
@@ -53,6 +54,7 @@ task body();
       });
       req.ap = 0;
       req.ap.min = 1;
+      req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
     
@@ -81,6 +83,7 @@ task body();
       });
       req.ap = 0;
       req.ap.min = 1;
+      req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
     
@@ -109,6 +112,7 @@ task body();
       });
       req.ap = 0;
       req.ap.min = 1;
+      req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
 
@@ -137,6 +141,7 @@ task body();
     req.b_in = 32'h00000000;  // Zero
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -146,6 +151,7 @@ task body();
     req.b_in = 32'hFFFFFFFF;  // Ones (-1)
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
 
@@ -155,6 +161,7 @@ task body();
     req.b_in = 32'h00000000;  // All zeros (0)
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
 
@@ -164,6 +171,7 @@ task body();
     req.b_in = 32'h12345678;  // Positive
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -173,6 +181,7 @@ task body();
     req.b_in = 32'h87654321;  // Negative
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
 
@@ -182,6 +191,7 @@ task body();
     req.b_in = 32'h12345678;  // Positive
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
 
@@ -191,6 +201,7 @@ task body();
     req.b_in = 32'h87654321;  // Negative
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -200,6 +211,7 @@ task body();
     req.b_in = 32'h80000000;  // Minimum negative (-2147483648)
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -209,6 +221,7 @@ task body();
     req.b_in = 32'h12345678;  // Same positive value
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -218,6 +231,7 @@ task body();
     req.b_in = 32'hABCDEF01;  // Same negative value
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -227,6 +241,7 @@ task body();
     req.b_in = 32'h7FFFFFFF;  // Max positive
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -236,6 +251,7 @@ task body();
     req.b_in = 32'h80000000;  // Min negative
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -245,6 +261,7 @@ task body();
     req.b_in = 32'h12345679;  // Larger positive
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     
@@ -254,6 +271,7 @@ task body();
     req.b_in = 32'h80000002;  // Less negative (larger)
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
         
@@ -263,6 +281,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Alternating 10 (negative)
     req.ap = 0;
     req.ap.min = 1;
+    req.ap.sub = 1;  // MIN requires SUB to be active
     start_item(req);
     finish_item(req);
     

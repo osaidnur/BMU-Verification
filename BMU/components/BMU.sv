@@ -144,8 +144,8 @@ module BMU (
             end
             error_next = 1'b0;
         end
-        // Minimum
-        else if (ap.min) begin
+        // Minimum - requires both MIN and SUB to be active
+        else if (ap.min && ap.sub) begin
             result_next = (a_in < b_in) ? a_in : b_in;
             error_next = 1'b0;
         end
@@ -190,6 +190,14 @@ module BMU (
                 // Negative halfword - sign extend with 1s in upper 16 bits
                 result_next = {16'hFFFF, a_in[15:0]};
             end
+            error_next = 1'b0;
+        end
+        // Pack Unsigned
+        else if (ap.packu) begin
+            // Pack the lower 16 bits of both inputs into a 32-bit result
+            // Result = {a_in[15:0], b_in[15:0]}
+            // Upper 16 bits of both inputs are ignored
+            result_next = {a_in[15:0], b_in[15:0]};
             error_next = 1'b0;
         end
         // Default case - no valid operation or unimplemented operation
