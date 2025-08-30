@@ -197,7 +197,7 @@ module BMU (
             // Pack the lower 16 bits of both inputs into a 32-bit result
             // Result = {a_in[15:0], b_in[15:0]}
             // Upper 16 bits of both inputs are ignored
-            result_next = {a_in[15:0], b_in[15:0]};
+            result_next = {b_in[31:16], a_in[31:16]};
             error_next = 1'b0;
         end
         // Default case - no valid operation or unimplemented operation
