@@ -178,6 +178,20 @@ module BMU (
             end
             error_next = 1'b0;
         end
+        // Sign Extend Halfword
+        else if (ap.siext_h) begin
+            // Take lower 16 bits of a_in and sign-extend to 32 bits
+            // If bit 15 is 0 (positive): extend with 0x0000
+            // If bit 15 is 1 (negative): extend with 0xFFFF
+            if (a_in[15] == 1'b0) begin
+                // Positive halfword - zero extend upper 16 bits
+                result_next = {16'h0000, a_in[15:0]};
+            end else begin
+                // Negative halfword - sign extend with 1s in upper 16 bits
+                result_next = {16'hFFFF, a_in[15:0]};
+            end
+            error_next = 1'b0;
+        end
         // Default case - no valid operation or unimplemented operation
         else begin
             result_next = 32'h0;
