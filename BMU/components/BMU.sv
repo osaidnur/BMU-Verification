@@ -167,6 +167,17 @@ module BMU (
             end
             error_next = 1'b0;
         end
+        // Count Population (Count Ones)
+        else if (ap.cpop) begin
+            // Count the number of '1' bits in a_in
+            result_next = 32'h0;
+            for (int i = 0; i < 32; i++) begin
+                if (a_in[i] == 1'b1) begin
+                    result_next = result_next + 1;
+                end
+            end
+            error_next = 1'b0;
+        end
         // Default case - no valid operation or unimplemented operation
         else begin
             result_next = 32'h0;
