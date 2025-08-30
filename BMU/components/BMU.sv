@@ -25,6 +25,7 @@ module BMU (
         logic sh3add;
         logic add;
         logic slt;
+        logic unsign;
         logic sub;
         logic clz;
         logic cpop;
@@ -134,13 +135,89 @@ module BMU (
         end
         // Set less than
         else if (ap.slt) begin
-            result_next = (a_in < b_in) ? 32'h1 : 32'h0;
+            if (ap.unsign) begin
+                // Unsigned comparison: treat both operands as unsigned
+                result_next = ($unsigned(a_in) < $unsigned(b_in)) ? 32'h1 : 32'h0;
+            end else begin
+                // Signed comparison: treat both operands as signed (default)
+                result_next = ($signed(a_in) < $signed(b_in)) ? 32'h1 : 32'h0;
+            end
             error_next = 1'b0;
         end
-        // Minimum
-        else if (ap.min) begin
+        // Minimum - requires both MIN and SUB to be active
+        else if (ap.min && ap.sub) begin
             result_next = (a_in < b_in) ? a_in : b_in;
             error_next = 1'b0;
+        end
+        // Count Leading Zeros
+        else if (ap.clz) begin
+            if (a_in == 32'h0) begin
+                // Special case: when input is all zeros, output is 0
+                result_next = 32'h0;
+            end else begin
+                // Count leading zeros from MSB
+                result_next = 32'h0;
+                for (int i = 31; i >= 0; i--) begin
+                    if (a_in[i] == 1'b0) begin
+                        result_next = result_next + 1;
+                    end else begin
+                        break; // Stop counting when we find the first 1
+                    end
+                end
+            end
+            error_next = 1'b0;
+        end
+        // Count Population (Count Ones)
+        else if (ap.cpop) begin
+            // Count the number of '1' bits in a_in
+            result_next = 32'h0;
+            for (int i = 0; i < 32; i++) begin
+                if (a_in[i] == 1'b1) begin
+                    result_next = result_next + 1;
+                end
+            end
+            error_next = 1'b0;
+        end
+        // Sign Extend Halfword
+        else if (ap.siext_h) begin
+            // Take lower 16 bits of a_in and sign-extend to 32 bits
+            // If bit 15 is 0 (positive): extend with 0x0000
+            // If bit 15 is 1 (negative): extend with 0xFFFF
+            if (a_in[15] == 1'b0) begin
+                // Positive halfword - zero extend upper 16 bits
+                result_next = {16'h0000, a_in[15:0]};
+            end else begin
+                // Negative halfword - sign extend with 1s in upper 16 bits
+                result_next = {16'hFFFF, a_in[15:0]};
+            end
+            error_next = 1'b0;
+        end
+        // Pack Unsigned
+        else if (ap.packu) begin
+            // Pack the lower 16 bits of both inputs into a 32-bit result
+            // Result = {a_in[15:0], b_in[15:0]}
+            // Upper 16 bits of both inputs are ignored
+            result_next = {b_in[31:16], a_in[31:16]};
+            error_next = 1'b0;
+        end
+        // Generalized OR Combine
+        else if (ap.gorc) begin
+            // GORC operation: bitwise OR reduction within each byte of a_in
+            // Valid only when b_in[4:0] = 5'b00111 (7)
+            // If any bit in a byte is 1 → entire byte becomes 0xFF
+            // If all bits in a byte are 0 → byte becomes 0x00
+            if (b_in[4:0] == 5'b00111) begin 
+                // Process each byte independently
+                result_next[31:24] = (a_in[31:24] != 8'h00) ? 8'hFF : 8'h00;  // Byte 3 (MSB)
+                result_next[23:16] = (a_in[23:16] != 8'h00) ? 8'hFF : 8'h00;  // Byte 2
+                result_next[15:8]  = (a_in[15:8]  != 8'h00) ? 8'hFF : 8'h00;  // Byte 1
+                result_next[7:0]   = (a_in[7:0]   != 8'h00) ? 8'hFF : 8'h00;  // Byte 0 (LSB)
+                error_next = 1'b0;
+            end else begin
+                // Invalid b_in[4:0] value - GORC requires b_in[4:0] = 7
+                result_next = 32'h0;
+                error_next = 1'b1;
+            end
         end
         // Default case - no valid operation or unimplemented operation
         else begin

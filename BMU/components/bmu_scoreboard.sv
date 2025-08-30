@@ -42,6 +42,7 @@ function void doo_print(bmu_sequence_item packet);
     if (packet.ap.sh3add) active_signals.push_back("sh3add=1");
     if (packet.ap.add) active_signals.push_back("add=1");
     if (packet.ap.slt) active_signals.push_back("slt=1");
+    if (packet.ap.unsign) active_signals.push_back("unsign=1");
     if (packet.ap.sub) active_signals.push_back("sub=1");
     if (packet.ap.clz) active_signals.push_back("clz=1");
     if (packet.ap.cpop) active_signals.push_back("cpop=1");
@@ -61,7 +62,7 @@ function void doo_print(bmu_sequence_item packet);
         end
     end
     
-    `uvm_info("Scoreboard", $sformatf("A=%0d, B=%0d, %s, Result=%0d, Error=%0b", 
+    `uvm_info("Scoreboard", $sformatf("A=%0h, B=%0h, %s, Result=%0h, Error=%0b", 
               packet.a_in, packet.b_in, signal_info, packet.result_ff, packet.error), UVM_LOW);
 endfunction
 

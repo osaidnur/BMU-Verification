@@ -24,6 +24,7 @@ rand struct packed {
   logic sh3add;
   logic add;
   logic slt;
+  logic unsign;
   logic sub;
   logic clz;
   logic cpop;
