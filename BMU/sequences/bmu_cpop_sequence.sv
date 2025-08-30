@@ -40,7 +40,7 @@ task body();
     // ==================== Directed Testing for Edge Cases ===================
     
     // Directed Test 1: All zeros - should return 0
-    `uvm_info(get_type_name(), "[Directed Test 1] All zeros", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 1] CPOP: All zeros", UVM_LOW);
     req.rst_l = 1;
     req.scan_mode = 0;
     req.valid_in = 1;
@@ -53,7 +53,7 @@ task body();
     finish_item(req);
     
     // Directed Test 2: All ones - should return 32
-    `uvm_info(get_type_name(), "[Directed Test 2] All ones ", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 2] CPOP: All ones ", UVM_LOW);
     req.a_in = 32'hFFFFFFFF;  // All ones
     req.b_in = 32'h0;
     req.ap = 0;
@@ -62,7 +62,7 @@ task body();
     finish_item(req);
     
     // Directed Test 3: Single bit set (LSB) - should return 1
-    `uvm_info(get_type_name(), "[Directed Test 3] Single LSB set ", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 3] CPOP: Single LSB set ", UVM_LOW);
     req.a_in = 32'h00000001;  // Only LSB set
     req.b_in = 32'h0;
     req.ap = 0;
@@ -71,7 +71,7 @@ task body();
     finish_item(req);
     
     // Directed Test 4: Single bit set (MSB) - should return 1
-    `uvm_info(get_type_name(), "[Directed Test 4] Single MSB set ", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 4] CPOP: Single MSB set ", UVM_LOW);
     req.a_in = 32'h80000000;  // Only MSB set
     req.b_in = 32'h0;
     req.ap = 0;
@@ -80,7 +80,7 @@ task body();
     finish_item(req);
     
     // Directed Test 5: Alternating pattern 1 - should return 16
-    `uvm_info(get_type_name(), "[Directed Test 5] Alternating pattern 1 (0x55555555) ", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 5] CPOP: Alternating pattern 1 (0x55555555) ", UVM_LOW);
     req.a_in = 32'h55555555;  // 01010101... (16 ones)
     req.b_in = 32'h0;
     req.ap = 0;
@@ -89,7 +89,7 @@ task body();
     finish_item(req);
     
     // Directed Test 6: Alternating pattern 2 - should return 16
-    `uvm_info(get_type_name(), "[Directed Test 6] Alternating pattern 2 (0xAAAAAAAA)", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 6] CPOP: Alternating pattern 2 (0xAAAAAAAA)", UVM_LOW);
     req.a_in = 32'hAAAAAAAA;  // 10101010... (16 ones)
     req.b_in = 32'h0;
     req.ap = 0;
@@ -98,7 +98,7 @@ task body();
     finish_item(req);
 
     // Directed Test 7: Nibble patterns - should return 16
-    `uvm_info(get_type_name(), "[Directed Test 7] Nibble pattern (0xF0F0F0F0)", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 7] CPOP: Nibble pattern (0xF0F0F0F0)", UVM_LOW);
     req.a_in = 32'hF0F0F0F0;  // Alternating nibbles
     req.b_in = 32'h0;
     req.ap = 0;
@@ -107,7 +107,7 @@ task body();
     finish_item(req);
     
     // Directed Test 8: Sparse pattern - should return 4
-    `uvm_info(get_type_name(), "[Directed Test 8] Sparse pattern (0x11111111) ", UVM_LOW);
+    `uvm_info(get_type_name(), "[Directed Test 8] CPOP: Sparse pattern (0x11111111) ", UVM_LOW);
     req.a_in = 32'h11111111;  // One bit per nibble
     req.b_in = 32'h0;
     req.ap = 0;
