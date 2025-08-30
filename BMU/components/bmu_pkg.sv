@@ -2,6 +2,9 @@ package bmu_pkg;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
   
+  // Include reference model first
+  `include "bmu_reference_model.sv"
+  
   // Include sequence item first (foundational type)
   // `include "bmu_interface.sv"
   `include "bmu_sequence_item.sv"
