@@ -200,6 +200,25 @@ module BMU (
             result_next = {b_in[31:16], a_in[31:16]};
             error_next = 1'b0;
         end
+        // Generalized OR Combine
+        else if (ap.gorc) begin
+            // GORC operation: bitwise OR reduction within each byte of a_in
+            // Valid only when b_in[4:0] = 5'b00111 (7)
+            // If any bit in a byte is 1 → entire byte becomes 0xFF
+            // If all bits in a byte are 0 → byte becomes 0x00
+            if (b_in[4:0] == 5'b00111) begin 
+                // Process each byte independently
+                result_next[31:24] = (a_in[31:24] != 8'h00) ? 8'hFF : 8'h00;  // Byte 3 (MSB)
+                result_next[23:16] = (a_in[23:16] != 8'h00) ? 8'hFF : 8'h00;  // Byte 2
+                result_next[15:8]  = (a_in[15:8]  != 8'h00) ? 8'hFF : 8'h00;  // Byte 1
+                result_next[7:0]   = (a_in[7:0]   != 8'h00) ? 8'hFF : 8'h00;  // Byte 0 (LSB)
+                error_next = 1'b0;
+            end else begin
+                // Invalid b_in[4:0] value - GORC requires b_in[4:0] = 7
+                result_next = 32'h0;
+                error_next = 1'b1;
+            end
+        end
         // Default case - no valid operation or unimplemented operation
         else begin
             result_next = 32'h0;
