@@ -15,7 +15,7 @@ class bmu_reference_model extends uvm_object;
         // Clear previous active signals
         active_signals.delete();
         
-        // Check each signal in the ap struct and record active ones
+        // Check each signal and record active the active ones
         if (packet.ap.csr_write) active_signals.push_back("csr_write");
         if (packet.ap.csr_imm) active_signals.push_back("csr_imm");
         if (packet.ap.zbb) active_signals.push_back("zbb");
@@ -40,50 +40,56 @@ class bmu_reference_model extends uvm_object;
         if (packet.ap.packu) active_signals.push_back("packu");
         if (packet.ap.gorc) active_signals.push_back("gorc");
         
-        // Also check other control signals
-        // if (packet.csr_ren_in) active_signals.push_back("csr_ren_in");
-        // if (!packet.valid_in) active_signals.push_back("valid_in_low");
-        // if (packet.scan_mode) active_signals.push_back("scan_mode");
-        // if (!packet.rst_l) active_signals.push_back("rst_l_low");
     endfunction
     
-    // Function to validate signal combinations (return 1 if valid, 0 if invalid)
+    // Validate signal combinations
     virtual function bit check_signals();
         
         if(active_signals.size() == 0) return 1; // No active signals is valid
         else if(active_signals.size() == 1) return 1; // Single active signal is valid
-        else if(active_signals.size() > 2) return 0; // More than 2 active signals is invalid
+        else if(active_signals.size() > 3) return 0; // More than 3 active signals is invalid
         
-        // csr_imm without csr_write is valid
-        if(active_signals[0] == "csr_imm" && active_signals[1]=="csr_write" 
-        || active_signals[0] == "csr_write" && active_signals[1]=="csr_imm") return 1;
+        if(active_signals.size() == 2)begin
 
-        // land + zbb is valid
-        if(active_signals[0] == "land" && active_signals[1]=="zbb"
-        || active_signals[0] == "zbb" && active_signals[1]=="land") return 1;
+            // csr_imm without csr_write is valid
+            if(active_signals[0] == "csr_imm" && active_signals[1]=="csr_write" 
+            || active_signals[0] == "csr_write" && active_signals[1]=="csr_imm") return 1;
 
-        // lxor + zbb is valid
-        if(active_signals[0] == "lxor" && active_signals[1]=="zbb"
-        || active_signals[0] == "zbb" && active_signals[1]=="lxor") return 1;
+            // land + zbb is valid
+            if(active_signals[0] == "land" && active_signals[1]=="zbb"
+            || active_signals[0] == "zbb" && active_signals[1]=="land") return 1;
 
-        // sh3add + zba is valid
-        if(active_signals[0] == "sh3add" && active_signals[1]=="zba"
-        || active_signals[0] == "zba" && active_signals[1]=="sh3add") return 1;
+            // lxor + zbb is valid
+            if(active_signals[0] == "lxor" && active_signals[1]=="zbb"
+            || active_signals[0] == "zbb" && active_signals[1]=="lxor") return 1;
 
-        // slt + unsign is valid
-        if(active_signals[0] == "slt" && active_signals[1]=="unsign"
-        || active_signals[0] == "unsign" && active_signals[1]=="slt") return 1;
+            // sh3add + zba is valid
+            if(active_signals[0] == "sh3add" && active_signals[1]=="zba"
+            || active_signals[0] == "zba" && active_signals[1]=="sh3add") return 1;
 
-        // min + sub is valid
-        if(active_signals[0] == "min" && active_signals[1]=="sub"
-        || active_signals[0] == "sub" && active_signals[1]=="min") return 1;
+            // slt + unsign is valid
+            if(active_signals[0] == "slt" && active_signals[1]=="unsign"
+            || active_signals[0] == "unsign" && active_signals[1]=="slt") return 1;
 
-        // Any other combination of two active signals is invalid
-        return 0;
+            // min + sub is valid
+            if(active_signals[0] == "min" && active_signals[1]=="sub"
+            || active_signals[0] == "sub" && active_signals[1]=="min") return 1;
+
+            // Any other combination of two active signals is invalid
+            return 0;
+        end
+        
+        else if (active_signals.size() == 3) begin
+            // slt + unsign + sub is valid (this is the only valid case)
+            if(active_signals[0] == "slt" && active_signals[1]=="unsign" && active_signals[2]=="sub") return 1;
+
+            // Any other combination of three active signals is invalid
+            return 0;
+        end
 
     endfunction
 
-    // Main function to compute BMU result based on sequence item
+    // Main function to compute the result
     virtual function struct packed {
         logic [31:0] data;
         logic error;
@@ -94,9 +100,6 @@ class bmu_reference_model extends uvm_object;
             logic error;
         } result;
         
-        // logic [32:0] add_result_extended; // Extended for overflow detection
-        // logic add_overflow;
-        
         // Initialize result
         result.data = 32'h0;
         result.error = 1'b0;
@@ -104,16 +107,16 @@ class bmu_reference_model extends uvm_object;
         // Record active signals
         record_signals(packet);
         
-        // NO operation - Reset conditions
+        // NO operation 
         if (!packet.valid_in || packet.scan_mode || !packet.rst_l) begin
             result.data = 32'h0;
             result.error = 1'b0;
             return result;
         end
 
-        // ==============================================================
-        // === CSR Operations ===========================================
-        // ==============================================================
+        // ======================================================================================
+        // === CSR Operations ===================================================================
+        // ======================================================================================
         
         // CSR Read operation
         if (packet.csr_ren_in && active_signals.size()==0) begin
@@ -151,10 +154,9 @@ class bmu_reference_model extends uvm_object;
             end
         end
 
-
-        // ==============================================================
-        // === Logical Operations =======================================
-        // ==============================================================
+        // ======================================================================================
+        // === Logical Operations ===============================================================
+        // ======================================================================================
         
         // Inverted AND
         if (packet.ap.land && packet.ap.zbb) begin
@@ -177,32 +179,32 @@ class bmu_reference_model extends uvm_object;
             return result;
         end
 
-        // Normal XOR
+        // Normal XOR 
         else if (packet.ap.lxor) begin
             result.data = packet.a_in ^ packet.b_in;
             result.error = 1'b0;
             return result;
         end
         
-        // ================================================================
-        // === Shifting and Masking Operations ============================
-        // ================================================================
+        // ========================================================================================
+        // === Shifting and Masking Operations ====================================================
+        // ========================================================================================
         
-        // Logical Left Shift
+        // Logical Left Shift - SLL
         else if (packet.ap.sll) begin
             result.data = packet.a_in << packet.b_in[4:0];
             result.error = 1'b0;
             return result;
         end
 
-        // Arithmetic Right Shift
+        // Arithmetic Right Shift - SRA
         else if (packet.ap.sra) begin
             result.data = packet.a_in >>> packet.b_in[4:0];
             result.error = 1'b0;
             return result;
         end
 
-        // Rotate Left
+        // Rotate Left - ROL
         else if (packet.ap.rol) begin
             int shift_amount = packet.b_in[4:0];
             result.data = {packet.a_in[31-shift_amount:0], packet.a_in[31:32-shift_amount]};
@@ -210,14 +212,14 @@ class bmu_reference_model extends uvm_object;
             return result;
         end
 
-        // Bit Extract
+        // Bit Extract - BEXT
         else if (packet.ap.bext) begin
             result.data = {31'd0, packet.a_in[packet.b_in[4:0]]};
             result.error  = 1'b0;
             return result;
         end
 
-        // Shift by 3 and Add
+        // Shift by 3 and Add - SH3ADD
         else if (packet.ap.sh3add && packet.ap.zba) begin
             result.data = (packet.a_in << 3) + packet.b_in;
             result.error = 1'b0;
@@ -229,58 +231,56 @@ class bmu_reference_model extends uvm_object;
             return result;
         end
 
-        // ================================================================
-        // === Arithmetic Operations ======================================
-        // ================================================================
+        // ========================================================================================
+        // === Arithmetic Operations ==============================================================
+        // ========================================================================================
 
-        // Addition
-        else if (packet.)
+        // Addition - ADD
+        else if (packet.add.ap.add) begin
+            result.data = packet.a_in + packet.b_in;
+            result.error = 1'b0;
+            return result;
+        end
 
+        // =======================================================================================
+        // === Bit Manipulation ==================================================================
+        // =======================================================================================
 
-
-
-        
-       
-        
-       
-       
-        // Set less than
-        else if (packet.ap.slt) begin
+        // Set on Less Than - SLT
+        else if (packet.ap.slt && packet.ap.sub) begin
             if (packet.ap.unsign) begin
-                // Unsigned comparison: treat both operands as unsigned
+                // Unsigned comparison
                 result.data = ($unsigned(packet.a_in) < $unsigned(packet.b_in)) ? 32'h1 : 32'h0;
             end else begin
-                // Signed comparison: treat both operands as signed (default)
+                // Signed comparison
                 result.data = ($signed(packet.a_in) < $signed(packet.b_in)) ? 32'h1 : 32'h0;
             end
             result.error = 1'b0;
+            return result;
         end
-        // Minimum - requires both MIN and SUB to be active
-        else if (packet.ap.min && packet.ap.sub) begin
-            result.data = (packet.a_in < packet.b_in) ? packet.a_in : packet.b_in;
-            result.error = 1'b0;
-        end
-        // Count Leading Zeros
+
+        // Count Leading Zeros - CLZ
         else if (packet.ap.clz) begin
             if (packet.a_in == 32'h0) begin
-                // Special case: when input is all zeros, output is 0
+                // when input is all zeros, the output is 0
                 result.data = 32'h0;
             end else begin
-                // Count leading zeros from MSB
+                // Count leading zeros
                 result.data = 32'h0;
                 for (int i = 31; i >= 0; i--) begin
                     if (packet.a_in[i] == 1'b0) begin
                         result.data = result.data + 1;
                     end else begin
-                        break; // Stop counting when we find the first 1
+                        break;
                     end
                 end
             end
             result.error = 1'b0;
+            return result;
         end
-        // Count Population (Count Ones)
+
+        // Count Set Bits - CPOP
         else if (packet.ap.cpop) begin
-            // Count the number of '1' bits in packet.a_in
             result.data = 32'h0;
             for (int i = 0; i < 32; i++) begin
                 if (packet.a_in[i] == 1'b1) begin
@@ -288,54 +288,54 @@ class bmu_reference_model extends uvm_object;
                 end
             end
             result.error = 1'b0;
+            return result;
         end
-        // Sign Extend Halfword
+
+        // Sign Extend Halfword - SIEXT_H
         else if (packet.ap.siext_h) begin
-            // Take lower 16 bits of packet.a_in and sign-extend to 32 bits
-            // If bit 15 is 0 (positive): extend with 0x0000
-            // If bit 15 is 1 (negative): extend with 0xFFFF
             if (packet.a_in[15] == 1'b0) begin
-                // Positive halfword - zero extend upper 16 bits
                 result.data = {16'h0000, packet.a_in[15:0]};
             end else begin
-                // Negative halfword - sign extend with 1s in upper 16 bits
                 result.data = {16'hFFFF, packet.a_in[15:0]};
             end
             result.error = 1'b0;
+            return result;
         end
-        // Pack Unsigned
+
+        // Minimum - MIN
+        else if (packet.ap.min && packet.ap.sub) begin
+            result.data = ($signed(packet.a_in) < $signed(packet.b_in)) ? packet.a_in : packet.b_in;
+            result.error = 1'b0;
+            return result;
+        end
+
+        // Pack Upper
         else if (packet.ap.packu) begin
-            // Pack the upper 16 bits of both inputs into a 32-bit result
-            // Result = {packet.b_in[31:16], packet.a_in[31:16]}
-            // Lower 16 bits of both inputs are ignored
             result.data = {packet.b_in[31:16], packet.a_in[31:16]};
             result.error = 1'b0;
+            return result;
         end
-        // Generalized OR Combine
+
+        // Bitwise OR Reduction within Bytes - GORC
         else if (packet.ap.gorc) begin
-            // GORC operation: bitwise OR reduction within each byte of packet.a_in
-            // Valid only when packet.b_in[4:0] = 5'b00111 (7)
-            // If any bit in a byte is 1 → entire byte becomes 0xFF
-            // If all bits in a byte are 0 → byte becomes 0x00
             if (packet.b_in[4:0] == 5'b00111) begin
-                // Process each byte independently
-                result.data[31:24] = (packet.a_in[31:24] != 8'h00) ? 8'hFF : 8'h00;  // Byte 3 (MSB)
-                result.data[23:16] = (packet.a_in[23:16] != 8'h00) ? 8'hFF : 8'h00;  // Byte 2
-                result.data[15:8]  = (packet.a_in[15:8]  != 8'h00) ? 8'hFF : 8'h00;  // Byte 1
-                result.data[7:0]   = (packet.a_in[7:0]   != 8'h00) ? 8'hFF : 8'h00;  // Byte 0 (LSB)
-                result.error = 1'b0;
+                result.data[31:24] = (packet.a_in[31:24] != 8'h00) ? 8'hFF : 8'h00;
+                result.data[23:16] = (packet.a_in[23:16] != 8'h00) ? 8'hFF : 8'h00;
+                result.data[15:8] =  (packet.a_in[15:8] != 8'h00) ? 8'hFF : 8'h00;
+                result.data[7:0] =   (packet.a_in[7:0] != 8'h00) ? 8'hFF : 8'h00;
             end else begin
-                // Invalid packet.b_in[4:0] value - GORC requires packet.b_in[4:0] = 7
                 result.data = 32'h0;
-                result.error = 1'b1;
             end
-        end
-        // Default case - no valid operation or unimplemented operation
-        else begin
-            result.data = 32'h0;
-            result.error = 1'b1; // Error for unsupported operation
+            result.error = 1'b0;
+            return result;
         end
         
-        return result;
+        // Default case - no valid operation or unsupported operation
+        else begin
+            result.data = 32'h0;
+            result.error = 1'b1;
+            return result;
+        end
+        
     endfunction
 endclass : bmu_reference_model
