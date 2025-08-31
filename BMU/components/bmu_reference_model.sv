@@ -1,4 +1,3 @@
-// BMU Reference Model Class for UVM Testbench
 class bmu_reference_model extends uvm_object;
     `uvm_object_utils(bmu_reference_model)
     
@@ -67,13 +66,21 @@ class bmu_reference_model extends uvm_object;
         if(active_signals[0] == "lxor" && active_signals[1]=="zbb"
         || active_signals[0] == "zbb" && active_signals[1]=="lxor") return 1;
 
+        // sh3add + zba is valid
+        if(active_signals[0] == "sh3add" && active_signals[1]=="zba"
+        || active_signals[0] == "zba" && active_signals[1]=="sh3add") return 1;
 
+        // slt + unsign is valid
+        if(active_signals[0] == "slt" && active_signals[1]=="unsign"
+        || active_signals[0] == "unsign" && active_signals[1]=="slt") return 1;
 
-        
-        
-        
-        
-       
+        // min + sub is valid
+        if(active_signals[0] == "min" && active_signals[1]=="sub"
+        || active_signals[0] == "sub" && active_signals[1]=="min") return 1;
+
+        // Any other combination of two active signals is invalid
+        return 0;
+
     endfunction
 
     // Main function to compute BMU result based on sequence item
@@ -87,8 +94,8 @@ class bmu_reference_model extends uvm_object;
             logic error;
         } result;
         
-        logic [32:0] add_result_extended; // Extended for overflow detection
-        logic add_overflow;
+        // logic [32:0] add_result_extended; // Extended for overflow detection
+        // logic add_overflow;
         
         // Initialize result
         result.data = 32'h0;
@@ -121,6 +128,15 @@ class bmu_reference_model extends uvm_object;
             return result;
         end
         
+        // ----------------------------------------------------
+        // Check if signal combination is valid
+        if (!check_signals()) begin
+            result.data = 32'h0;
+            result.error = 1'b0;
+            return result;
+        end
+        // ----------------------------------------------------
+
         // CSR Write operation
         if(packet.ap.csr_write) begin
             if(packet.ap.csr_imm) begin
@@ -135,12 +151,6 @@ class bmu_reference_model extends uvm_object;
             end
         end
 
-        // Check if signal combination is valid
-        if (!check_signals()) begin
-            result.data = 32'h0;
-            result.error = 1'b0;
-            return result;
-        end
 
         // ==============================================================
         // === Logical Operations =======================================
@@ -178,48 +188,62 @@ class bmu_reference_model extends uvm_object;
         // === Shifting and Masking Operations ============================
         // ================================================================
         
-        if (packet.ap.add) begin
-            add_result_extended = {packet.a_in[31], packet.a_in} + {packet.b_in[31], packet.b_in};
-            result.data = add_result_extended[31:0];
-            
-            // Check for overflow (sign extension differs from MSB)
-            add_overflow = (add_result_extended[32] != add_result_extended[31]);
-            result.error = add_overflow;
-        end
-       
-        // Logical AND
-       
-        // Logical XOR
-        else if (packet.ap.lxor) begin
-            result.data = packet.a_in ^ packet.b_in;
-            result.error = 1'b0;
-        end
-        // Shift left logical
+        // Logical Left Shift
         else if (packet.ap.sll) begin
-            result.data = packet.a_in << packet.b_in[4:0]; // Only use lower 5 bits for shift amount
+            result.data = packet.a_in << packet.b_in[4:0];
             result.error = 1'b0;
+            return result;
         end
-        // Shift right arithmetic
+
+        // Arithmetic Right Shift
         else if (packet.ap.sra) begin
-            result.data = packet.a_in >>> packet.b_in[4:0]; // Arithmetic right shift
+            result.data = packet.a_in >>> packet.b_in[4:0];
             result.error = 1'b0;
+            return result;
         end
-        // Rotate left
+
+        // Rotate Left
         else if (packet.ap.rol) begin
-            result.data = (packet.a_in << packet.b_in[4:0]) | (packet.a_in >> (32 - packet.b_in[4:0]));
+            int shift_amount = packet.b_in[4:0];
+            result.data = {packet.a_in[31-shift_amount:0], packet.a_in[31:32-shift_amount]};
             result.error = 1'b0;
+            return result;
         end
-        // Bit extract
+
+        // Bit Extract
         else if (packet.ap.bext) begin
-            // Extract packet.a_in[packet.b_in[4:0]] into the LSB, zero-extend the rest
             result.data = {31'd0, packet.a_in[packet.b_in[4:0]]};
             result.error  = 1'b0;
+            return result;
         end
-        // Shift by 3 and add
-        else if (packet.ap.sh3add) begin
+
+        // Shift by 3 and Add
+        else if (packet.ap.sh3add && packet.ap.zba) begin
             result.data = (packet.a_in << 3) + packet.b_in;
             result.error = 1'b0;
+            return result;
         end
+        else if (packet.ap.sh3add) begin
+            result.data = 32'h0;
+            result.error = 1'b1;
+            return result;
+        end
+
+        // ================================================================
+        // === Arithmetic Operations ======================================
+        // ================================================================
+
+        // Addition
+        else if (packet.)
+
+
+
+
+        
+       
+        
+       
+       
         // Set less than
         else if (packet.ap.slt) begin
             if (packet.ap.unsign) begin
