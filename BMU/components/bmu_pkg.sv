@@ -2,9 +2,6 @@ package bmu_pkg;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
   
-  // Include reference model first
-  `include "bmu_reference_model.sv"
-  
   // Include sequence item first (foundational type)
   // `include "bmu_interface.sv"
   `include "bmu_sequence_item.sv"
@@ -34,6 +31,10 @@ package bmu_pkg;
   `include "bmu_monitor.sv"
   `include "bmu_agent.sv"
   `include "bmu_subscriber.sv"
+  
+  //   // Include reference model first
+  // `include "bmu_reference_model.sv"
+
   `include "bmu_scoreboard.sv"
   `include "bmu_environment.sv"
 
