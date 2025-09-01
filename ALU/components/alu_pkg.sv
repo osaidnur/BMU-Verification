@@ -16,6 +16,7 @@ package alu_pkg;
   `include "../sequences/alu_underflow_sequence.sv"
   `include "../sequences/alu_random_sequence.sv"
   `include "../sequences/alu_undefined_opcode_sequence.sv"
+  `include "../sequences/alu_reset_sequence.sv"
 
   // Include components (they depend on sequence_item and sequences)
   `include "alu_sequencer.sv"

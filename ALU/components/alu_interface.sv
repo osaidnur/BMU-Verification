@@ -7,19 +7,21 @@ logic [31:0] result; // Output result
 logic error; // Error flag for overflow
 
 clocking driver_cb @(negedge clk);
-default input #1 output #0;
+// default input #1 output #0;
 output A;
 output B;
 output opcode;
+output rst;
 endclocking
 
 clocking monitor_cb @(posedge clk); 
-default input #0 output #1;
+// default input #0 output #5;
 input A;
 input B;
 input opcode;
 input result;
 input error;
+input rst;
 endclocking
 
 modport driver_mod (clocking driver_cb,input clk);

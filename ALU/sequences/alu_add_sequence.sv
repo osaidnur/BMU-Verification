@@ -10,20 +10,29 @@ task body();
   alu_sequence_item req;
   req = alu_sequence_item::type_id::create("req");
   
-  // Reset the DUT
-  req.rst = 1;
-  start_item(req);
-  `uvm_info(get_type_name(), "Reset the DUT", UVM_NONE);
-  finish_item(req);
-    #10;
+  // // Reset the DUT
+  // req.rst = 1;
+  // start_item(req);
+  // `uvm_info(get_type_name(), "Reset the DUT", UVM_NONE);
+  // finish_item(req);
+    // #10;
     // Randomize the inputs
+    repeat(20) begin
+        req.randomize() with {
+            opcode == 3'b000; // for addition
+        };
+        start_item(req);
+        finish_item(req);
+    end
+
+    // idle cycle 
     req.randomize() with {
+
         opcode == 3'b000; // for addition
     };
     start_item(req);
     finish_item(req);
-    #10;
-  
+    
 endtask: body
 
 endclass: alu_add_sequence

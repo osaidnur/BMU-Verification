@@ -12,10 +12,10 @@ initial begin
     clk = 0;
     rst = 0;
     
-    #1;
-    rst = 1;
-    #1;
-    rst = 0;
+    // #1;
+    // rst = 1;
+    // #1;
+    // rst = 0;
 end
 
 alu_interface intf(clk,rst);

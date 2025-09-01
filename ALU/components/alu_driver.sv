@@ -15,10 +15,11 @@ function void build_phase(uvm_phase phase);
 endfunction
 
 task run_phase(uvm_phase phase);
-forever begin 
+forever begin
     seq_item_port.get_next_item(req);
     drive();
     `uvm_info(get_type_name, $sformatf("Driver: signals driven to the DUT are: A = %0d,%0d, Opcode = %h", req.A, req.B,req.opcode), UVM_HIGH);        
+    #20;
     seq_item_port.item_done();
 end
 endtask

@@ -16,6 +16,7 @@ endfunction
 task run_phase(uvm_phase phase);
     forever begin
         @(vif.monitor_cb); 
+        #20;
         packet.A = vif.monitor_cb.A; 
         packet.B = vif.monitor_cb.B; 
         packet.opcode = vif.monitor_cb.opcode; 
