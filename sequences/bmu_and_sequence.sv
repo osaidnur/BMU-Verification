@@ -294,7 +294,7 @@ task body();
 
 
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
+    repeat(2) begin
       start_item(req);
       req.rst_l = 1;
       req.scan_mode = 0;
