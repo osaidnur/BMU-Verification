@@ -207,7 +207,11 @@ class bmu_reference_model extends uvm_object;
         // Rotate Left - ROL
         else if (packet.ap.rol) begin
             int shift_amount = packet.b_in[4:0];
-            result.data = {packet.a_in[31-shift_amount:0], packet.a_in[31:32-shift_amount]};
+            if (shift_amount == 0) begin
+                result.data = packet.a_in;
+            end else begin
+                result.data = (packet.a_in << shift_amount) | (packet.a_in >> (32 - shift_amount));
+            end
             result.error = 1'b0;
             return result;
         end
@@ -236,7 +240,7 @@ class bmu_reference_model extends uvm_object;
         // ========================================================================================
 
         // Addition - ADD
-        else if (packet.add.ap.add) begin
+        else if (packet.ap.add) begin
             result.data = packet.a_in + packet.b_in;
             result.error = 1'b0;
             return result;
