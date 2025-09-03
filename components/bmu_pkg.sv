@@ -5,6 +5,7 @@ package bmu_pkg;
   // Include sequence item first (foundational type)
   // `include "bmu_interface.sv"
   `include "bmu_sequence_item.sv"
+  `include "bmu_reference_model.sv"
   
   // Include sequences (they depend on sequence_item)
   `include "../sequences/bmu_reset_sequence.sv"
