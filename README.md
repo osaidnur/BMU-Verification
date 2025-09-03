@@ -1,37 +1,9 @@
-# Orion-DV-Training
+# BMU-Verification
 
-## EDA-playground links
+## Last Update:
 
-### Lab 1
+- #### **The `main branch` represents the version of the project that implements my solution to the synchronization problem, by adding a delay in the driver and the monitor.(I added 2clock cycles for both of the driver and the monitor)**
 
-- **Lab 1.1**: [Run on EDA Playground](https://edaplayground.com/x/ekAb)
-- **Lab 1.2**: [Run on EDA Playground](https://edaplayground.com/x/rJGk)
+- #### **The branch `with_sync_problem` represents a version of the project that has a synchronization problem (It's the Normal Behavior of the DUT). The result of the operands are shown one cycle later than the operands themselves.**
 
-### Lab 2
 
-- **Lab 2.1**: [Run on EDA Playground](https://edaplayground.com/x/PwbF)
-
-### Lab 3
-
-- **Lab 3.1**: [Run on EDA Playground](https://edaplayground.com/x/nMHK)
-- **Lab 3.2**: [Run on EDA Playground](https://edaplayground.com/x/ZBPM)
-- **Lab 3.3**: [Run on EDA Playground](https://edaplayground.com/x/RHvG)
-
-### Lab 4
-
-- **Lab 4.1**: [Run on EDA Playground](https://www.edaplayground.com/x/bVMN)
-- **Lab 4.2**: [Run on EDA Playground](https://www.edaplayground.com/x/KqmB)
-- **Lab 4.3**: [Run on EDA Playground](https://www.edaplayground.com/x/REZ3)
-
-### Lab 5
-- **Lab 5.1**: [Run on EDA Playground](https://www.edaplayground.com/x/AxBj)
-- **Lab 5.2**: [Run on EDA Playground](https://www.edaplayground.com/x/qjgk)
-- **Lab 5.3**: [Run on EDA Playground](https://www.edaplayground.com/x/NHXr)
-- **Lab 5.4**: [Run on EDA Playground](https://www.edaplayground.com/x/HUbp)
-
-### Lab 6
-- **Lab 6.1**: [Run on EDA Playground](https://www.edaplayground.com/x/ZEBU)
-- **Lab 6.2**: [Run on EDA Playground](https://www.edaplayground.com/x/Uagm)
-
-### Lab 7
-- **Lab 7**: [Run on EDA Playground](https://www.edaplayground.com/x/SzgF)

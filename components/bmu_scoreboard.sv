@@ -6,6 +6,12 @@ function new(string name,uvm_component parent);
     super.new(name,parent);
 endfunction: new
 
+// If DUT latency changes, override via config_db or set here.
+  int unsigned latency = 1;
+ 
+  // Pipeline of input transactions (one per cycle)
+  bmu_sequence_item cmd_pipe[$];
+
 uvm_analysis_imp#(bmu_sequence_item,bmu_scoreboard) exp;
 bmu_sequence_item refPacket; // Reference packet for comparison
 
@@ -13,12 +19,47 @@ function void build_phase(uvm_phase phase);
     super.build_phase(phase); 
     exp= new("exp",this);
     refPacket = new();
+
+    // Optional: allow overriding latency from test/env
+    if (uvm_config_db#(int unsigned)::get(this, "", "latency", latency))
+      this.latency = latency;
 endfunction
 
 bmu_sequence_item packetQueue [$];
 
 function void write(bmu_sequence_item req); 
-    packetQueue.push_back(req); 
+    // DECLARATIONS FIRST
+    bmu_sequence_item in_tr;
+    bmu_sequence_item prod;
+
+    // Flush on reset
+    if (!req.rst_l) begin
+      cmd_pipe.delete();
+      `uvm_info("SCOREBOARD", "Reset observed -> clearing pipeline", UVM_MEDIUM)
+      return;
+    end
+ 
+    // Push current-cycle *inputs* into the pipe (gate with valid if you use bubbles)
+    in_tr = new();
+    in_tr.a_in          = req.a_in;
+    in_tr.b_in          = req.b_in;
+    in_tr.ap            = req.ap;
+    in_tr.valid_in      = req.valid_in;
+    in_tr.csr_ren_in    = req.csr_ren_in;
+    in_tr.csr_rddata_in = req.csr_rddata_in;
+    in_tr.scan_mode     = req.scan_mode;
+    in_tr.rst_l         = req.rst_l;
+    cmd_pipe.push_back(in_tr);
+
+    // When we have enough history, pop the producer of today's result
+    if (cmd_pipe.size() > latency) begin // here cmd_pipe stores the history of the inputs and outputs
+        prod = cmd_pipe.pop_front(); // here we pop the front of the pipe
+        
+        prod.result_ff = req.result_ff;
+        prod.error = req.error;
+
+        packetQueue.push_back(prod); // Store the transaction for later printing
+    end
 endfunction
 
 // Function to print only the active signal name and value

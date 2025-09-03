@@ -19,7 +19,7 @@ forever begin
     seq_item_port.get_next_item(req);
     drive();
     `uvm_info("Driver ", $sformatf("Driving: A=%0d, B=%0d, AP=%b", req.a_in, req.b_in, req.ap), UVM_HIGH);
-    #20;
+    // #20;
     seq_item_port.item_done();
 end
 endtask

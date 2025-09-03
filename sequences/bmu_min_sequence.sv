@@ -31,15 +31,15 @@ task body();
     end
 
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
 
     // MIN operations with one negative number
     `uvm_info(get_type_name(), "[Randomized Tests 2] MIN operation with positive and negative numbers", UVM_LOW);
@@ -59,15 +59,15 @@ task body();
     end
     
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
 
     `uvm_info(get_type_name(), "[Randomized Tests 3] MIN operation with both positive numbers", UVM_LOW);
     // MIN operations with both positive numbers
@@ -88,15 +88,15 @@ task body();
     end
     
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
     
     // Min operations with both negative numbers
     `uvm_info(get_type_name(), "[Randomized Tests 4] MIN operation with both negative numbers", UVM_LOW);
@@ -117,15 +117,15 @@ task body();
     end
 
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
 
     // ====================================================================================
     // ==================== Directed Testing ==============================================
@@ -286,7 +286,7 @@ task body();
     finish_item(req);
     
     // Add idle cycles to ensure all transactions are completed
-    repeat(1) begin
+    repeat(2) begin
       start_item(req);
       req.rst_l = 1;
       req.scan_mode = 0;

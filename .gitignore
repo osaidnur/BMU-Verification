@@ -11,6 +11,9 @@ INCA_libs
 *.key
 verisium_debug_logs
 .verisium_debug_auto_save
+verisium_debug_logs_backup
+.reset_sync_save
+.reinvoke.sim
 ida.db
 .probeFlags.flg
 coverage_db

@@ -9,7 +9,7 @@ TEST_DIR = tests
 RTL_DIR = rtl
 
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-TEST_NAME = bmu_add_test
+TEST_NAME = bmu_and_test
 VERBOSITY = UVM_LOW
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -79,6 +79,6 @@ simvision:
 # Clean generated files
 clean:
 	@echo "Cleaning generated files..."
-	rm -rf xrun.* waves.shm xcelium.d .simvision INCA_libs *.log *.history *.fsdb *.key verisium_debug_logs .verisium_debug_auto_save ida.db .probeFlags.flg coverage_db cov_work
+	rm -rf xrun.* waves.shm xcelium.d .simvision INCA_libs *.log *.history *.fsdb *.key verisium_debug_logs .verisium_debug_auto_save ida.db .probeFlags.flg coverage_db cov_work verisium_debug_logs_backup .reset_sync_save .reinvoke.sim
 
 .PHONY: run_sim wave test cov_sim cov_report imc compile check simvision clean all
