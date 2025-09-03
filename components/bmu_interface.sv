@@ -61,7 +61,7 @@ clocking driver_cb @(posedge clk);
 endclocking
 
 clocking monitor_cb @(posedge clk); 
-  default input #2step output #0; 
+  // default input #2 output #2; 
   input rst_l;
   input a_in;
   input b_in;
