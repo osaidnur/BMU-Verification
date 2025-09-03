@@ -28,15 +28,15 @@ task body();
     end
 
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
 
     `uvm_info(get_type_name(), "[Randomized Tests 2] ROL operation with specific bit patterns", UVM_LOW);
     // ROL operations with specific bit patterns
@@ -56,15 +56,15 @@ task body();
     end
     
     // Add idle cycles to ensure all transactions from previous test are completed
-    repeat(1) begin
-      start_item(req);
-      req.rst_l = 1;
-      req.scan_mode = 0;
-      req.valid_in = 0;  // No valid transaction - idle cycle
-      req.csr_ren_in = 0;
-      req.ap = 0;
-      finish_item(req);
-    end
+    // repeat(1) begin
+    //   start_item(req);
+    //   req.rst_l = 1;
+    //   req.scan_mode = 0;
+    //   req.valid_in = 0;  // No valid transaction - idle cycle
+    //   req.csr_ren_in = 0;
+    //   req.ap = 0;
+    //   finish_item(req);
+    // end
     
     // ==================== Directed Testing for Rotate by 0 bits ===================
     
@@ -130,7 +130,7 @@ task body();
     
 
     // Add idle cycles to ensure all transactions are completed
-    repeat(1) begin
+    repeat(2) begin
       start_item(req);
       req.rst_l = 1;
       req.scan_mode = 0;
