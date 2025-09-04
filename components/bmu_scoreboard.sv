@@ -6,6 +6,9 @@ function new(string name,uvm_component parent);
     super.new(name,parent);
 endfunction: new
 
+// Reference model instance
+bmu_reference_model ref_model;
+
 // If DUT latency changes, override via config_db or set here.
   int unsigned latency = 1;
  
@@ -13,12 +16,11 @@ endfunction: new
   bmu_sequence_item cmd_pipe[$];
 
 uvm_analysis_imp#(bmu_sequence_item,bmu_scoreboard) exp;
-bmu_sequence_item refPacket; // Reference packet for comparison
 
 function void build_phase(uvm_phase phase); 
     super.build_phase(phase); 
     exp= new("exp",this);
-    refPacket = new();
+    ref_model = bmu_reference_model::type_id::create("ref_model");
 
     // Optional: allow overriding latency from test/env
     if (uvm_config_db#(int unsigned)::get(this, "", "latency", latency))
@@ -109,73 +111,38 @@ endfunction
 
 task run_phase(uvm_phase phase);
     bmu_sequence_item packet;
+    struct packed {
+        logic [31:0] data;
+        logic error;
+    } expected_result;
+    bit match;
+
     forever begin
     wait(packetQueue.size>0);
     packet = packetQueue.pop_front();
-    // bmu_RF(packet.A,packet.B,packet.opcode, this.refPacket.result, this.refPacket.error); 
+    
+    // Get expected result from reference model
+    expected_result = ref_model.compute_result(packet);
+    
+    // Compare with DUT output
+    match = (packet.result_ff === expected_result.data) && 
+            (packet.error === expected_result.error);
+        
     
     // Use the custom do_print function instead of the default print
     doo_print(packet);
     
-    // if(is_equal(packet,this.refPacket)) begin 
-    // `uvm_info("[Pass]", $sformatf("------ :: Match :: ------ "), UVM_LOW);  
-    // `uvm_info("MATCH", $sformatf("expected %d, got %d", this.refPacket.result, packet.result) ,UVM_LOW); 
-    // end
-    // else begin 
-    // `uvm_info("[Fail]", $sformatf("------ :: Mismatch :: ------"), UVM_LOW); 
-    // `uvm_info("MATCH", $sformatf("expected %d, got %d", this.refPacket.result, packet.result) ,UVM_LOW); 
-    // end
+    // Print comparison result
+        if (match) begin 
+            `uvm_info("[PASS]", $sformatf("------ :: Match :: ------ "), UVM_LOW);  
+            `uvm_info("MATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
+                      expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
+        end else begin 
+            `uvm_error("[FAIL]", $sformatf("------ :: Mismatch :: ------")); 
+            `uvm_info("MISMATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
+                      expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
+        end
     end
 endtask
-
-// function bit is_equal(bmu_sequence_item reference, bmu_sequence_item packet); 
-//     if(reference.A === packet.A && 
-//     reference.B === packet.B && 
-//     reference.opcode === packet.opcode && 
-//     reference.result === packet.result &&
-//     reference.error === packet.error
-//     ) return 1; 
-//     else return 0; 
-// endfunction
-
-// static task bmu_RF(input logic signed [31:0] A, 
-// input logic [31:0] B, 
-// input logic [2:0] opcode, 
-// output logic [31:0] result, 
-// output logic error); 
-// error = 0; // Initialize error flag 
-// case (opcode) 
-//     3'b000: begin 
-//     // Addition operation 
-//     result = A + B; 
-//     if ((A > 0 && B > 0 && result < 0) || (A < 0 && B < 0 && result > 0))  
-//     error = 1; 
-//     end
-//     3'b001: begin 
-//     // Subtraction operation (A - B) 
-//     result = A - B; 
-//     if ((A < 0 && B > 0 && result > A) || (A > 0 && B < 0 && result < A))  
-//     error = 1; 
-//     end 
-//     3'b010: begin 
-//     // AND operation 
-//     result = A & B; 
-//     end 
-//     3'b011: begin
-//         // OR operation 
-//     result = A | B; 
-//     end 
-//     3'b100: begin 
-//     // XOR operation 
-//     result = A ^ B; 
-//     end 
-//     default: begin
-//     result = 0; 
-//     error = 1'b1; // Set error flag for invalid opcode 
-//     end
-// endcase
-// endtask
-
-// endclass: bmu_scoreboard
 
 endclass: bmu_scoreboard
