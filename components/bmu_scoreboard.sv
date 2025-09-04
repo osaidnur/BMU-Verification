@@ -141,7 +141,7 @@ task run_phase(uvm_phase phase);
               active_msg), UVM_HIGH);
 
     // less detailed info log
-    `uvm_info("Scoreboard", $sformatf("Validating packet with Inputs: a_in=%0d, b_in=%0d || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
+    `uvm_info("Scoreboard", $sformatf("Validating packet with Inputs: a_in=%0h, b_in=%0h || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
               packet.a_in, packet.b_in, active_msg, packet.result_ff, packet.error), UVM_MEDIUM);
 
     
