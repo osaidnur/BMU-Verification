@@ -71,6 +71,10 @@ class bmu_reference_model extends uvm_object;
             if(active_signals[0] == "slt" && active_signals[1]=="unsign"
             || active_signals[0] == "unsign" && active_signals[1]=="slt") return 1;
 
+            // slt + sub is valid
+            if(active_signals[0] == "slt" && active_signals[1]=="sub"
+            || active_signals[0] == "sub" && active_signals[1]=="slt") return 1;
+
             // min + sub is valid
             if(active_signals[0] == "min" && active_signals[1]=="sub"
             || active_signals[0] == "sub" && active_signals[1]=="min") return 1;
