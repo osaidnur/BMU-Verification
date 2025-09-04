@@ -108,7 +108,7 @@ class bmu_reference_model extends uvm_object;
         record_signals(packet);
         
         // NO operation 
-        if (!packet.valid_in || packet.scan_mode || !packet.rst_l) begin
+        if (!packet.valid_in || !packet.rst_l) begin
             result.data = 32'h0;
             result.error = 1'b0;
             return result;
