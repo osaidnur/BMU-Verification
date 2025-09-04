@@ -104,6 +104,10 @@ module BMU (
             result_next = a_in & b_in;   // Normal AND
             error_next = 1'b0;
         end
+        else if(ap.lxor && ap.zbb) begin
+            result_next = a_in ^ ~b_in;  // Inverted XOR
+            error_next = 1'b0;
+        end
         // Logical XOR
         else if (ap.lxor) begin
             result_next = a_in ^ b_in;
@@ -117,6 +121,19 @@ module BMU (
         // Shift right arithmetic
         else if (ap.sra) begin
             result_next = a_in >>> b_in[4:0]; // Arithmetic right shift
+            error_next = 1'b0;
+        end
+        // Rotate left
+        else if (ap.rol) begin
+            // Rotate a_in left by b_in[4:0] positions
+            // ROL(x, n) = (x << n) | (x >> (32 - n))
+            logic [4:0] rotate_amount;
+            rotate_amount = b_in[4:0];
+            if (rotate_amount == 5'b0) begin
+                result_next = a_in; // No rotation needed
+            end else begin
+                result_next = (a_in << rotate_amount) | (a_in >> (32 - rotate_amount));
+            end
             error_next = 1'b0;
         end
         else if (ap.bext) begin
