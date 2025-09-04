@@ -9,6 +9,7 @@ package bmu_pkg;
   
   // Include sequences (they depend on sequence_item)
   `include "../sequences/bmu_reset_sequence.sv"
+  `include "../sequences/bmu_csr_write_sequence.sv"
   `include "../sequences/bmu_add_sequence.sv"
   `include "../sequences/bmu_and_sequence.sv"
   `include "../sequences/bmu_bext_sequence.sv"
@@ -36,6 +37,7 @@ package bmu_pkg;
   `include "bmu_environment.sv"
 
   // Include tests (they depend on environment and sequences)
+  `include "../tests/bmu_csr_write_test.sv"
   `include "../tests/bmu_add_test.sv"
   `include "../tests/bmu_and_test.sv"
   `include "../tests/bmu_bext_test.sv"

@@ -3,6 +3,7 @@ class bmu_regression_test extends uvm_test;
 
 bmu_environment env;
 
+bmu_csr_write_sequence csr_write_sequence;
 bmu_add_sequence add_sequence;
 bmu_and_sequence and_sequence;
 bmu_bext_sequence bext_sequence;
@@ -31,6 +32,7 @@ endfunction
 
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
+    csr_write_sequence = bmu_csr_write_sequence::type_id::create("bmu_csr_write_sequence");
     add_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
     and_sequence = bmu_and_sequence::type_id::create("bmu_and_sequence");
     bext_sequence = bmu_bext_sequence::type_id::create("bmu_bext_sequence");
@@ -49,6 +51,8 @@ task run_phase(uvm_phase phase);
     reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
 
     reset_seq.start(env.agent.sequencer);
+    // # 10;
+    csr_write_sequence.start(env.agent.sequencer);
     // # 10;
     add_sequence.start(env.agent.sequencer);
     // # 10;
