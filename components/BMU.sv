@@ -92,18 +92,9 @@ module BMU (
             result_next = add_result_extended[31:0];
             
             // Check for overflow (sign extension differs from MSB)
-            add_overflow = (add_result_extended[32] != add_result_extended[31]);
-            error_next = add_overflow;
-        end
-        // Subtraction operation (basic implementation)
-        else if (ap.sub) begin
-            add_result_extended = {a_in[31], a_in} - {b_in[31], b_in};
-            result_next = add_result_extended[31:0];
-            
-            // Check for overflow
-            add_overflow = (add_result_extended[32] != add_result_extended[31]);
-            error_next = add_overflow;
-        end
+            // add_overflow = (add_result_extended[32] != add_result_extended[31]);
+            error_next = 1'b0;
+        end        
         // Logical AND
         else if (ap.land && ap.zbb) begin
             result_next = a_in & ~b_in;  // Inverted AND
@@ -111,6 +102,10 @@ module BMU (
         end
         else if (ap.land) begin
             result_next = a_in & b_in;   // Normal AND
+            error_next = 1'b0;
+        end
+        else if(ap.lxor && ap.zbb) begin
+            result_next = a_in ^ ~b_in;  // Inverted XOR
             error_next = 1'b0;
         end
         // Logical XOR
@@ -126,6 +121,19 @@ module BMU (
         // Shift right arithmetic
         else if (ap.sra) begin
             result_next = a_in >>> b_in[4:0]; // Arithmetic right shift
+            error_next = 1'b0;
+        end
+        // Rotate left
+        else if (ap.rol) begin
+            // Rotate a_in left by b_in[4:0] positions
+            // ROL(x, n) = (x << n) | (x >> (32 - n))
+            logic [4:0] rotate_amount;
+            rotate_amount = b_in[4:0];
+            if (rotate_amount == 5'b0) begin
+                result_next = a_in; // No rotation needed
+            end else begin
+                result_next = (a_in << rotate_amount) | (a_in >> (32 - rotate_amount));
+            end
             error_next = 1'b0;
         end
         else if (ap.bext) begin

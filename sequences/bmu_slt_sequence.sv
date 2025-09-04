@@ -23,6 +23,7 @@ task body();
       });
       req.ap = 0;
       req.ap.slt = 1;
+      req.ap.sub = 1;
       req.ap.unsign = 0;  // Signed comparison
       finish_item(req);
     end
@@ -50,6 +51,7 @@ task body();
       });
       req.ap = 0;
       req.ap.slt = 1;
+      req.ap.sub = 1;
       req.ap.unsign = 1;  // Unsigned comparison
       finish_item(req);
     end
@@ -79,6 +81,7 @@ task body();
     req.b_in = 32'h12345678;  // Equal values
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -89,6 +92,7 @@ task body();
     req.b_in = 32'h0000000A;  // 10
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -99,6 +103,7 @@ task body();
     req.b_in = 32'h00000005;  // 5
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -109,6 +114,7 @@ task body();
     req.b_in = 32'hFFFFFFFB;  // -5
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -119,6 +125,7 @@ task body();
     req.b_in = 32'hFFFFFFF6;  // -10
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -129,6 +136,7 @@ task body();
     req.b_in = 32'h00000005;  // 5
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -139,6 +147,7 @@ task body();
     req.b_in = 32'hFFFFFFFB;  // -5
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -149,6 +158,7 @@ task body();
     req.b_in = 32'h00000001;  // 1
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -159,6 +169,7 @@ task body();
     req.b_in = 32'h00000000;  // 1
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -170,6 +181,7 @@ task body();
     req.b_in = 32'h80000000;  // Min negative (-2^31)
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -181,6 +193,7 @@ task body();
     req.b_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed: 0 < -1 is false
     start_item(req);
     finish_item(req);
@@ -192,6 +205,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Pattern 2 (negative in signed)
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
@@ -206,6 +220,7 @@ task body();
     req.b_in = 32'h12345678;  // Equal values
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 1;  // Unsigned
     start_item(req);
     finish_item(req);
@@ -216,6 +231,7 @@ task body();
     req.b_in = 32'h00000001;  // 1
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 1;  // Unsigned
     start_item(req);
     finish_item(req);
@@ -226,6 +242,7 @@ task body();
     req.b_in = 32'h00000000;  // 1
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 1;  // Unsigned
     start_item(req);
     finish_item(req);
@@ -236,6 +253,7 @@ task body();
     req.b_in = 32'hFFFFFFFF;  // All ones (max unsigned)
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 1;  // Unsigned: 0 < max is true
     start_item(req);
     finish_item(req);
@@ -247,6 +265,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Pattern 2
     req.ap = 0;
     req.ap.slt = 1;
+    req.ap.sub = 1;
     req.ap.unsign = 1;  // Unsigned
     start_item(req);
     finish_item(req);
