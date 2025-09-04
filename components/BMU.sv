@@ -92,18 +92,9 @@ module BMU (
             result_next = add_result_extended[31:0];
             
             // Check for overflow (sign extension differs from MSB)
-            add_overflow = (add_result_extended[32] != add_result_extended[31]);
-            error_next = add_overflow;
-        end
-        // Subtraction operation (basic implementation)
-        else if (ap.sub) begin
-            add_result_extended = {a_in[31], a_in} - {b_in[31], b_in};
-            result_next = add_result_extended[31:0];
-            
-            // Check for overflow
-            add_overflow = (add_result_extended[32] != add_result_extended[31]);
-            error_next = add_overflow;
-        end
+            // add_overflow = (add_result_extended[32] != add_result_extended[31]);
+            error_next = 1'b0;
+        end        
         // Logical AND
         else if (ap.land && ap.zbb) begin
             result_next = a_in & ~b_in;  // Inverted AND
