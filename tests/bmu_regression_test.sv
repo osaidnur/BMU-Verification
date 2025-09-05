@@ -3,6 +3,7 @@ class bmu_regression_test extends uvm_test;
 
 bmu_environment env;
 
+bmu_csr_write_sequence csr_write_sequence;
 bmu_add_sequence add_sequence;
 bmu_and_sequence and_sequence;
 bmu_bext_sequence bext_sequence;
@@ -19,6 +20,7 @@ bmu_slt_sequence slt_sequence;
 bmu_sra_sequence sra_sequence;
 bmu_xor_sequence xor_sequence;
 bmu_reset_sequence reset_seq;
+bmu_errors_sequence errors_sequence;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -31,6 +33,7 @@ endfunction
 
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
+    csr_write_sequence = bmu_csr_write_sequence::type_id::create("bmu_csr_write_sequence");
     add_sequence = bmu_add_sequence::type_id::create("bmu_add_sequence");
     and_sequence = bmu_and_sequence::type_id::create("bmu_and_sequence");
     bext_sequence = bmu_bext_sequence::type_id::create("bmu_bext_sequence");
@@ -47,8 +50,11 @@ task run_phase(uvm_phase phase);
     sra_sequence = bmu_sra_sequence::type_id::create("bmu_sra_sequence");
     xor_sequence = bmu_xor_sequence::type_id::create("bmu_xor_sequence");
     reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
+    errors_sequence = bmu_errors_sequence::type_id::create("bmu_errors_sequence");
 
     reset_seq.start(env.agent.sequencer);
+    // # 10;
+    csr_write_sequence.start(env.agent.sequencer);
     // # 10;
     add_sequence.start(env.agent.sequencer);
     // # 10;
@@ -79,6 +85,9 @@ task run_phase(uvm_phase phase);
     sra_sequence.start(env.agent.sequencer);
     // # 10;
     xor_sequence.start(env.agent.sequencer);
+    // # 10;
+    errors_sequence.start(env.agent.sequencer);
+
 
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of Regression Test =========", UVM_LOW);

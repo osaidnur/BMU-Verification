@@ -67,10 +67,6 @@ class bmu_reference_model extends uvm_object;
             if(active_signals[0] == "sh3add" && active_signals[1]=="zba"
             || active_signals[0] == "zba" && active_signals[1]=="sh3add") return 1;
 
-            // slt + unsign is valid
-            if(active_signals[0] == "slt" && active_signals[1]=="unsign"
-            || active_signals[0] == "unsign" && active_signals[1]=="slt") return 1;
-
             // slt + sub is valid
             if(active_signals[0] == "slt" && active_signals[1]=="sub"
             || active_signals[0] == "sub" && active_signals[1]=="slt") return 1;
