@@ -25,6 +25,7 @@ package bmu_pkg;
   `include "../sequences/bmu_slt_sequence.sv"
   `include "../sequences/bmu_sra_sequence.sv"
   `include "../sequences/bmu_xor_sequence.sv"
+  `include "../sequences/bmu_errors_sequence.sv"
 
 
   // Include components (they depend on sequence_item and sequences)
@@ -54,7 +55,7 @@ package bmu_pkg;
   `include "../tests/bmu_slt_test.sv"
   `include "../tests/bmu_sra_test.sv"
   `include "../tests/bmu_xor_test.sv"
+  `include "../tests/bmu_errors_test.sv"
 
   
-
 endpackage
