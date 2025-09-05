@@ -43,6 +43,10 @@ module BMU (
     logic [31:0] result_next;
     logic error_next;
     
+    // Previous result storage for valid_in behavior
+    logic [31:0] previous_result;
+    logic previous_error;
+    
     // Overflow detection for addition
     logic add_overflow;
     logic [32:0] add_result_extended; // Extended for overflow detection
@@ -75,10 +79,10 @@ module BMU (
         add_overflow = 1'b0;
         add_result_extended = 33'h0;
         
-        // Default: no operation
+        // When valid_in is disabled, return previous result
         if (!valid_in) begin
-            result_next = 32'h0;
-            error_next = 1'b0;
+            result_next = previous_result;
+            error_next = previous_error;
         end
         // Check if only one operation signal is active
         // else if (!is_single_op_active()) begin
@@ -239,10 +243,18 @@ module BMU (
         if (!rst_l) begin
             result_ff <= 32'h0;
             error <= 1'b0;
+            previous_result <= 32'h0;
+            previous_error <= 1'b0;
             // $display("[%0t] BMU: Reset asserted - result_ff <= 0, error <= 0", $time);
         end else begin
             result_ff <= result_next;
             error <= error_next;
+            
+            // Store previous result when valid_in is active
+            if (valid_in) begin
+                previous_result <= result_next;
+                previous_error <= error_next;
+            end
         end
     end
 
