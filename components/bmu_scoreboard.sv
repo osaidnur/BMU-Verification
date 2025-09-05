@@ -135,10 +135,9 @@ task run_phase(uvm_phase phase);
     active_msg = get_active_signals(packet);
 
     // detailed info log
-    `uvm_info("Scoreboard", $sformatf("Validating packet with inputs: a_in=%0h, b_in=%0h, ap=%p, valid_in=%0b, csr_ren_in=%0b, csr_rddata_in=%0h, scan_mode=%0b, rst_l=%0b || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
-              packet.a_in, packet.b_in, packet.ap, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.scan_mode, packet.rst_l,
-              packet.result_ff, packet.error,
-              active_msg), UVM_HIGH);
+    `uvm_info("Scoreboard", $sformatf("Validating packet with inputs: a_in=%0h, b_in=%0h, valid_in=%0b, csr_ren_in=%0b, csr_rddata_in=%0h, scan_mode=%0b, rst_l=%0b || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
+              packet.a_in, packet.b_in, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.scan_mode, packet.rst_l,
+               active_msg, packet.result_ff, packet.error), UVM_HIGH);
 
     // less detailed info log
     `uvm_info("Scoreboard", $sformatf("Validating packet with Inputs: a_in=%0h, b_in=%0h || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
