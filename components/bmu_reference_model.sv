@@ -4,6 +4,10 @@ class bmu_reference_model extends uvm_object;
     // Store the current active signals
     string active_signals[$];
     
+    // Store previous result to maintain RTL-like behavior
+    logic [31:0] previous_result = 32'h0;
+    logic previous_error = 1'b0;
+    
     // Constructor
     function new(string name = "bmu_reference_model");
         super.new(name);
@@ -107,10 +111,20 @@ class bmu_reference_model extends uvm_object;
         // Record active signals
         record_signals(packet);
         
-        // NO operation 
-        if (!packet.valid_in || !packet.rst_l) begin
+        // When valid_in is low, it returns the previous result
+        if (!packet.valid_in) begin
+            result.data = previous_result;
+            result.error = previous_error;
+            return result;
+        end
+        
+        // Reset condition - when reset is low, output goes to zero
+        if (!packet.rst_l) begin
             result.data = 32'h0;
             result.error = 1'b0;
+            // Update previous result for reset
+            previous_result = 32'h0;
+            previous_error = 1'b0;
             return result;
         end
 
@@ -122,12 +136,16 @@ class bmu_reference_model extends uvm_object;
         if (packet.csr_ren_in && active_signals.size()==0) begin
             result.data = packet.csr_rddata_in; // load the data from input
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         else if(packet.csr_ren_in) begin
             // Invalid if other operations are also active - Raise error
             result.data = 32'h0;
             result.error = 1'b1;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
@@ -136,6 +154,8 @@ class bmu_reference_model extends uvm_object;
         if (!check_signals()) begin
             result.data = 32'h0;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         // ----------------------------------------------------
@@ -145,11 +165,15 @@ class bmu_reference_model extends uvm_object;
             if(packet.ap.csr_imm) begin
                 result.data = packet.b_in; // For CSR immediate, use b_in as immediate value
                 result.error = 1'b0;
+                previous_result = result.data;
+                previous_error = result.error;
                 return result;
             end
             else begin
                 result.data = packet.a_in; // For CSR write, use a_in as the value to write
-                result.error = 1'b0; 
+                result.error = 1'b0;
+                previous_result = result.data;
+                previous_error = result.error;
                 return result;
             end
         end
@@ -162,6 +186,8 @@ class bmu_reference_model extends uvm_object;
         if (packet.ap.land && packet.ap.zbb) begin
             result.data = packet.a_in & ~packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
@@ -169,6 +195,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.land) begin
             result.data = packet.a_in & packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
@@ -176,6 +204,8 @@ class bmu_reference_model extends uvm_object;
         else if(packet.ap.lxor && packet.ap.zbb) begin
             result.data = packet.a_in ^ ~packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -183,6 +213,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.lxor) begin
             result.data = packet.a_in ^ packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
@@ -194,6 +226,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.sll) begin
             result.data = packet.a_in << packet.b_in[4:0];
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -201,6 +235,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.sra) begin
             result.data = packet.a_in >>> packet.b_in[4:0];
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -213,13 +249,17 @@ class bmu_reference_model extends uvm_object;
                 result.data = (packet.a_in << shift_amount) | (packet.a_in >> (32 - shift_amount));
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
         // Bit Extract - BEXT
         else if (packet.ap.bext) begin
             result.data = {31'd0, packet.a_in[packet.b_in[4:0]]};
-            result.error  = 1'b0;
+            result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -227,11 +267,15 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.sh3add && packet.ap.zba) begin
             result.data = (packet.a_in << 3) + packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         else if (packet.ap.sh3add) begin
             result.data = 32'h0;
             result.error = 1'b1;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -243,6 +287,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.add) begin
             result.data = packet.a_in + packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -260,6 +306,8 @@ class bmu_reference_model extends uvm_object;
                 result.data = ($signed(packet.a_in) < $signed(packet.b_in)) ? 32'h1 : 32'h0;
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -280,6 +328,8 @@ class bmu_reference_model extends uvm_object;
                 end
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -292,6 +342,8 @@ class bmu_reference_model extends uvm_object;
                 end
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -303,6 +355,8 @@ class bmu_reference_model extends uvm_object;
                 result.data = {16'hFFFF, packet.a_in[15:0]};
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -310,6 +364,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.min && packet.ap.sub) begin
             result.data = ($signed(packet.a_in) < $signed(packet.b_in)) ? packet.a_in : packet.b_in;
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -317,6 +373,8 @@ class bmu_reference_model extends uvm_object;
         else if (packet.ap.packu) begin
             result.data = {packet.b_in[31:16], packet.a_in[31:16]};
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
 
@@ -331,6 +389,8 @@ class bmu_reference_model extends uvm_object;
                 result.data = 32'h0;
             end
             result.error = 1'b0;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
@@ -338,6 +398,8 @@ class bmu_reference_model extends uvm_object;
         else begin
             result.data = 32'h0;
             result.error = 1'b1;
+            previous_result = result.data;
+            previous_error = result.error;
             return result;
         end
         
