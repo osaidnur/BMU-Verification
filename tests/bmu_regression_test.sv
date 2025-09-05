@@ -21,6 +21,7 @@ bmu_sra_sequence sra_sequence;
 bmu_xor_sequence xor_sequence;
 bmu_reset_sequence reset_seq;
 bmu_errors_sequence errors_sequence;
+bmu_valid_in_sequence valid_in_sequence;
 
 function new(string name,uvm_component parent);
     super.new(name,parent);
@@ -51,6 +52,7 @@ task run_phase(uvm_phase phase);
     xor_sequence = bmu_xor_sequence::type_id::create("bmu_xor_sequence");
     reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
     errors_sequence = bmu_errors_sequence::type_id::create("bmu_errors_sequence");
+    valid_in_sequence = bmu_valid_in_sequence::type_id::create("bmu_valid_in_sequence");
 
     reset_seq.start(env.agent.sequencer);
     // # 10;
@@ -85,6 +87,8 @@ task run_phase(uvm_phase phase);
     sra_sequence.start(env.agent.sequencer);
     // # 10;
     xor_sequence.start(env.agent.sequencer);
+    // # 10;
+    valid_in_sequence.start(env.agent.sequencer);
     // # 10;
     errors_sequence.start(env.agent.sequencer);
 
