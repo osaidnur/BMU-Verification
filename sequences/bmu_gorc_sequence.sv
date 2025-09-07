@@ -182,10 +182,18 @@ task body();
     req.ap.gorc = 1;
     start_item(req);
     finish_item(req);
+
+    // Directed Test 13: Different alternating pattern
+    `uvm_info(get_type_name(), "[Directed Test 13] GORC: Alternating Pattern 3 ", UVM_LOW);
+    req.a_in = 32'hAAAAAAAA;  // Different alternating pattern
+    req.b_in = 32'h00000007;  // b_in[4:0] = 7 for valid GORC
+    req.ap = 0;
+    req.ap.gorc = 1;
+    start_item(req);
+    finish_item(req);
     
-    
-    // Directed Test 13: Single bit in different positions
-    `uvm_info(get_type_name(), "[Directed Test 13] GORC: different Bit positions (0x08040201)", UVM_LOW);
+    // Directed Test 14: Single bit in different positions
+    `uvm_info(get_type_name(), "[Directed Test 14] GORC: different Bit positions (0x08040201)", UVM_LOW);
     req.a_in = 32'h08040201;  // Different single bit positions per byte
     req.b_in = 32'h00000007;  // b_in[4:0] = 7 for valid GORC
     req.ap = 0;

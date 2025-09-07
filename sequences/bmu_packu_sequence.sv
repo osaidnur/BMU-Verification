@@ -141,9 +141,20 @@ task body();
     req.ap.packu = 1;
     start_item(req);
     finish_item(req);
+
+    // Directed Test 11: Alternating patterns in upper halfwords
+    `uvm_info(get_type_name(), "[Directed Test 11] PACKU: Alternating upper patterns ", UVM_LOW);
+    req.a_in = 32'h55555555;  // upper = 0x5555 (alternating 01)
+    req.b_in = 32'hAAAA0000;  // upper = 0xAAAA (alternating 10)
+    req.ap = 0;
+    req.ap.packu = 1;
+    start_item(req);
+    finish_item(req);
+
     
-    // Directed Test 11: Byte boundaries in upper halfwords
-    `uvm_info(get_type_name(), "[Directed Test 11] PACKU: Byte boundaries ", UVM_LOW);
+    
+    // Directed Test 12: Byte boundaries in upper halfwords
+    `uvm_info(get_type_name(), "[Directed Test 12] PACKU: Byte boundaries ", UVM_LOW);
     req.a_in = 32'h00FF1234;  // upper = 0x00FF
     req.b_in = 32'hFF005678;  // upper = 0xFF00
     req.ap = 0;
@@ -151,8 +162,8 @@ task body();
     start_item(req);
     finish_item(req);
       
-    // Directed Test 12: Nibble patterns
-    `uvm_info(get_type_name(), "[Directed Test 12] PACKU: Nibble patterns (0x9876F0F0, 0x54320A0A)", UVM_LOW);
+    // Directed Test 13: Nibble patterns
+    `uvm_info(get_type_name(), "[Directed Test 13] PACKU: Nibble patterns (0x9876F0F0, 0x54320A0A)", UVM_LOW);
     req.a_in = 32'hF0F09876;  // upper = 0xF0F0
     req.b_in = 32'h0A0A5432;  // upper = 0x0A0A
     req.ap = 0;
