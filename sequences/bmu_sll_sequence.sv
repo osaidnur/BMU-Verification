@@ -27,6 +27,7 @@ task body();
       finish_item(req);
     end
 
+
     // Add idle cycles to ensure all transactions from previous test are completed
     // repeat(1) begin
     //   start_item(req);
@@ -131,6 +132,17 @@ task body();
      // req.rst_l = 1;
     req.a_in = 32'hAAAAAAAA;
     req.b_in = 32'h0000001F;  // Shift by 0 bits
+    req.ap = 0;
+    req.ap.sll = 1;
+    start_item(req);
+    finish_item(req);
+
+
+    // Test 7: Shift by 31 bits with another alternating pattern
+    `uvm_info(get_type_name(), "[Directed Test 7] Shift by 31 bits with b_in all ones", UVM_LOW);
+     // req.rst_l = 1;
+    req.a_in = 32'hAAAAAAAA;
+    req.b_in = 32'hFFFFFFFF;  // Shift by 0 bits
     req.ap = 0;
     req.ap.sll = 1;
     start_item(req);

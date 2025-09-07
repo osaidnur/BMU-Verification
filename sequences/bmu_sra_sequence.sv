@@ -146,6 +146,15 @@ task body();
     req.ap.sra = 1;
     start_item(req);
     finish_item(req);
+
+    // Test 9: Shift by 31 bits with all ones
+    `uvm_info(get_type_name(), "[Directed Test 9] Shift by 31 bits with all ones (0xFFFFFFFF)", UVM_LOW);
+    req.a_in = 32'h00FAFA00;  // All ones
+    req.b_in = 32'hFFFFFFFF;  // Shift by 31 bits
+    req.ap = 0;
+    req.ap.sra = 1;
+    start_item(req);
+    finish_item(req);
  
 
     // Add idle cycles to ensure all transactions are completed
