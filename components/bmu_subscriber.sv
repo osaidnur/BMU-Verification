@@ -8,7 +8,9 @@ covergroup bmuCoverage;
     A: coverpoint sub.a_in {
         bins zero = {32'h00000000};
         bins ones = {32'hFFFFFFFF};
+        bins pos = {[32'h00000001: 32'h7FFFFFFF]};
         bins max_pos = {32'h7FFFFFFF};
+        bins neg = {[32'h80000000: 32'hFFFFFFFF]};
         bins max_neg = {32'h80000000};
         bins alt_pattern1 = {32'h55555555};
         bins alt_pattern2 = {32'hAAAAAAAA};
@@ -18,7 +20,9 @@ covergroup bmuCoverage;
     B: coverpoint sub.b_in {
         bins zero = {32'h00000000};
         bins ones = {32'hFFFFFFFF};
+        bins pos = {[32'h00000001: 32'h7FFFFFFF]};
         bins max_pos = {32'h7FFFFFFF};
+        bins neg = {[32'h80000000: 32'hFFFFFFFF]};
         bins max_neg = {32'h80000000};
         bins alt_pattern1 = {32'h55555555};
         bins alt_pattern2 = {32'hAAAAAAAA};
@@ -71,7 +75,9 @@ covergroup bmuCoverage;
     Result: coverpoint sub.result_ff {
         bins zero = {32'h00000000};
         bins ones = {32'hFFFFFFFF};
+        bins pos = {[32'h00000001: 32'h7FFFFFFF]};
         bins max_pos = {32'h7FFFFFFF};
+        bins neg = {[32'h80000000: 32'hFFFFFFFF]};
         bins max_neg = {32'h80000000};
         bins alt_pattern1 = {32'h55555555};
         bins alt_pattern2 = {32'hAAAAAAAA};
@@ -89,80 +95,89 @@ covergroup bmuCoverage;
     // Logical Instructions with Interesting Values
     LAND_WITH_CORNERS: cross AP_LAND, A, B {
         ignore_bins ignore_land_inactive = binsof(AP_LAND) intersect {0};
+        ignore_bins ignore_max_pos_neg = binsof(AP_LAND) intersect {1} && (binsof(A.max_pos) || binsof(A.max_neg) ||
+                                         binsof(B.max_pos) || binsof(B.max_neg));
         
-        bins land_zero_ops = binsof(AP_LAND) intersect {1} && 
-                            (binsof(A.zero) || binsof(B.zero));
-        bins land_ones_ops = binsof(AP_LAND) intersect {1} && 
-                            (binsof(A.ones) || binsof(B.ones));
-        bins land_patterns = binsof(AP_LAND) intersect {1} && 
-                            (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
+        bins land_zero_ops = binsof(AP_LAND) intersect {1} && (binsof(A.zero) || binsof(B.zero));
+        bins land_ones_ops = binsof(AP_LAND) intersect {1} && (binsof(A.ones) || binsof(B.ones));
+        bins land_patterns = binsof(AP_LAND) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
                              binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
     }
     
     LXOR_WITH_CORNERS: cross AP_LXOR, A, B {
         ignore_bins ignore_lxor_inactive = binsof(AP_LXOR) intersect {0};
+        ignore_bins ignore_max_pos_neg = binsof(AP_LXOR) intersect {1} && (binsof(A.max_pos) || binsof(A.max_neg) ||
+                                         binsof(B.max_pos) || binsof(B.max_neg));
         
-        bins lxor_zero_ops = binsof(AP_LXOR) intersect {1} && 
-                            (binsof(A.zero) || binsof(B.zero));
-        bins lxor_ones_ops = binsof(AP_LXOR) intersect {1} && 
-                            (binsof(A.ones) || binsof(B.ones));
-        bins lxor_patterns = binsof(AP_LXOR) intersect {1} && 
-                            (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
+        bins lxor_zero_ops = binsof(AP_LXOR) intersect {1} && (binsof(A.zero) || binsof(B.zero));
+        bins lxor_ones_ops = binsof(AP_LXOR) intersect {1} && (binsof(A.ones) || binsof(B.ones));
+        bins lxor_patterns = binsof(AP_LXOR) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
                              binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
     }
     
     // Shift Instructions with Interesting Values  
     SLL_WITH_CORNERS: cross AP_SLL, A, B {
         ignore_bins ignore_sll_inactive = binsof(AP_SLL) intersect {0};
+        ignore_bins ignore_b_alt_patterns = binsof(AP_SLL) intersect {1} && (binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
+
+        ignore_bins ignore_pos_neg_b = binsof(AP_SLL) intersect {1} && (binsof(B.pos) || binsof(B.neg) || 
+                                   binsof(B.max_pos) || binsof(B.max_neg));
         
         bins sll_zero_shift = binsof(AP_SLL) intersect {1} && binsof(B.zero);
-        bins sll_max_shift = binsof(AP_SLL) intersect {1} && 
-                            (binsof(A.max_pos) || binsof(A.max_neg));
-        bins sll_patterns = binsof(AP_SLL) intersect {1} && 
-                           (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        bins sll_max_shift = binsof(AP_SLL) intersect {1} && (binsof(B.max_pos) || binsof(B.ones));
+        bins a_is_zero = binsof(AP_SLL) intersect {1} && (binsof(A.zero) || binsof(B.zero));
+        bins a_is_ones = binsof(AP_SLL) intersect {1} && (binsof(A.ones) || binsof(B.ones));
+        bins sll_patterns = binsof(AP_SLL) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
     }
     
     SRA_WITH_CORNERS: cross AP_SRA, A, B {
         ignore_bins ignore_sra_inactive = binsof(AP_SRA) intersect {0};
+        ignore_bins ignore_b_alt_patterns = binsof(AP_SRA) intersect {1} && (binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
+        ignore_bins ignore_pos_neg_b =  binsof(AP_SRA) intersect {1} && (binsof(B.pos) || binsof(B.neg) || binsof(B.max_neg) || binsof(B.max_pos));
         
         bins sra_zero_shift = binsof(AP_SRA) intersect {1} && binsof(B.zero);
-        bins sra_max_shift = binsof(AP_SRA) intersect {1} && 
-                            (binsof(A.max_pos) || binsof(A.max_neg));
-        bins sra_patterns = binsof(AP_SRA) intersect {1} && 
-                           (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        bins sra_max_shift = binsof(AP_SRA) intersect {1} && (binsof(B.max_pos) || binsof(B.ones));
+        bins sra_patterns = binsof(AP_SRA) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        bins shift_pos = binsof(AP_SRA) intersect {1} && (binsof(A.pos));
+        bins shift_neg = binsof(AP_SRA) intersect {1} && (binsof(A.neg));
     }
     
     ROL_WITH_CORNERS: cross AP_ROL, A, B {
         ignore_bins ignore_rol_inactive = binsof(AP_ROL) intersect {0};
+        ignore_bins ignore_b_alt_patterns = binsof(AP_ROL) intersect {1} && (binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
+        ignore_bins ignore_pos_neg_b = binsof(AP_ROL) intersect {1} && (binsof(B.pos) || binsof(B.neg) || binsof(B.max_neg) || binsof(B.max_pos));
         
         bins rol_zero_shift = binsof(AP_ROL) intersect {1} && binsof(B.zero);
-        bins rol_max_shift = binsof(AP_ROL) intersect {1} && 
-                            (binsof(A.max_pos) || binsof(A.max_neg));
-        bins rol_patterns = binsof(AP_ROL) intersect {1} && 
-                           (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        bins rol_max_shift = binsof(AP_ROL) intersect {1} && (binsof(B.ones));
+        bins rol_patterns = binsof(AP_ROL) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
     }
     
     // Bit Manipulation Instructions with Interesting Values
     BEXT_WITH_CORNERS: cross AP_BEXT, A, B {
         ignore_bins ignore_bext_inactive = binsof(AP_BEXT) intersect {0};
-        
-        bins bext_zero_ops = binsof(AP_BEXT) intersect {1} && 
-                            (binsof(A.zero) || binsof(B.zero));
-        bins bext_ones_ops = binsof(AP_BEXT) intersect {1} && 
-                            (binsof(A.ones) || binsof(B.ones));
-        bins bext_patterns = binsof(AP_BEXT) intersect {1} && 
-                            (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        ignore_bins ignore_b_alt_patterns = binsof(AP_BEXT) intersect {1} && (binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
+        ignore_bins ignore_pos_neg_b = binsof(AP_BEXT) intersect {1} && (binsof(B.neg) || binsof(B.max_neg));
+        ignore_bins ignore_a_pos_neg = binsof(AP_BEXT) intersect {1} && (binsof(A.pos) || binsof(A.neg) || 
+                                   binsof(A.max_pos) || binsof(A.max_neg));
+
+        bins bext_zero_ops = binsof(AP_BEXT) intersect {1} && (binsof(A.zero));
+        bins b_is_zero = binsof(AP_BEXT) intersect {1} && (binsof(B.zero));
+        bins bext_ones_ops = binsof(AP_BEXT) intersect {1} && (binsof(A.ones));
+        bins bext_patterns = binsof(AP_BEXT) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
     }
 
     SH3ADD_WITH_CORNERS: cross AP_SH3ADD, A, B {
         ignore_bins ignore_sh3add_inactive = binsof(AP_SH3ADD) intersect {0};
+        ignore_bins ignore_max_pos_neg = binsof(AP_SH3ADD) intersect {1} && (binsof(A.max_pos) || binsof(A.max_neg) );
         
         bins sh3add_zero_ops = binsof(AP_SH3ADD) intersect {1} && 
                               (binsof(A.zero) || binsof(B.zero));
         bins sh3add_max_pos = binsof(AP_SH3ADD) intersect {1} && 
                              (binsof(A.max_pos) || binsof(B.max_pos));
-        bins sh3add_patterns = binsof(AP_SH3ADD) intersect {1} && 
-                              (binsof(A.alt_pattern1) || binsof(B.alt_pattern1));
+        bins sh3add_A_patterns = binsof(AP_SH3ADD) intersect {1} && 
+                              (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
+        bins sh3add_B_patterns = binsof(AP_SH3ADD) intersect {1} && 
+                              (binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
     }
 
     // Arithmetic Instructions with Interesting Values
@@ -170,30 +185,40 @@ covergroup bmuCoverage;
         // Ignore all cases where ADD is not active (ADD = 0)
         ignore_bins ignore_add_inactive = binsof(AP_ADD) intersect {0};
         
-        bins add_zero_ops = binsof(AP_ADD) intersect {1} && 
-                           (binsof(A.zero) || binsof(B.zero));
-        bins add_ones_ops = binsof(AP_ADD) intersect {1} && 
-                           (binsof(A.ones) || binsof(B.ones));
-        bins add_max_pos = binsof(AP_ADD) intersect {1} && 
-                          (binsof(A.max_pos) || binsof(B.max_pos));
-        bins add_max_neg = binsof(AP_ADD) intersect {1} && 
-                          (binsof(A.max_neg) || binsof(B.max_neg));
-        bins add_patterns = binsof(AP_ADD) intersect {1} && 
-                           (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
+        bins add_zero_ops = binsof(AP_ADD) intersect {1} && (binsof(A.zero) || binsof(B.zero));
+        bins add_ones_ops = binsof(AP_ADD) intersect {1} && (binsof(A.ones) || binsof(B.ones));
+        bins add_pos_negs = binsof(AP_ADD) intersect {1} && (binsof(A.pos) || binsof(A.neg) ||
+                            binsof(B.pos) || binsof(B.neg));
+        bins add_max_pos = binsof(AP_ADD) intersect {1} && (binsof(A.max_pos) || binsof(B.max_pos));
+        bins add_max_neg = binsof(AP_ADD) intersect {1} && (binsof(A.max_neg) || binsof(B.max_neg));
+        bins add_patterns = binsof(AP_ADD) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
                             binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
     }
 
     // Bit Manipulation Instructions with Interesting Values
-    SLT_WITH_CORNERS: cross AP_SLT, A, B {
+    SLT_WITH_CORNERS: cross AP_SLT,AP_SUB,AP_UNSIGN, A, B {
         ignore_bins ignore_slt_inactive = binsof(AP_SLT) intersect {0};
+        ignore_bins ignore_sub_inactive = binsof(AP_SUB) intersect {0};
+        ignore_bins ignore_alternate_patterns = binsof(AP_SLT) intersect {1} && 
+                           (binsof(A.alt_pattern1) || binsof(A.alt_pattern2) ||
+                            binsof(B.alt_pattern1) || binsof(B.alt_pattern2));
+        ignore_bins ignore_unsigned = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {1} &&
+                           binsof(AP_SUB) intersect {1} && (binsof(A.max_neg) || binsof(A.max_pos) || binsof(B.max_neg) || binsof(B.max_pos));
         
-        bins slt_zero_cmp = binsof(AP_SLT) intersect {1} && 
-                           (binsof(A.zero) || binsof(B.zero));
-        bins slt_max_cmp = binsof(AP_SLT) intersect {1} && 
-                          (binsof(A.max_pos) || binsof(A.max_neg) ||
-                           binsof(B.max_pos) || binsof(B.max_neg));
-        bins slt_equal_values = binsof(AP_SLT) intersect {1} && 
-                               (binsof(A.zero) && binsof(B.zero));
+        bins slt_zero_cmp = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {1} &&
+                           binsof(AP_SUB) intersect {1} && (binsof(A.zero) || binsof(B.zero));
+        bins slt_ones_cmp = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {1} &&
+                           binsof(AP_SUB) intersect {1} && (binsof(A.ones) || binsof(B.ones));
+
+        bins slt_min_cmp = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {0} &&
+                           binsof(AP_SUB) intersect {1} && (binsof(A.max_neg) || binsof(B.max_neg));
+        bins slt_max_cmp = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {0} &&
+                           binsof(AP_SUB) intersect {1} && (binsof(A.max_pos) || binsof(B.max_pos));
+
+        bins slt_equal_values_unsigned = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {1} &&
+                            binsof(AP_SUB) intersect {1} && (binsof(A.zero) && binsof(B.zero));
+        bins slt_equal_values_signed = binsof(AP_SLT) intersect {1} && binsof(AP_UNSIGN) intersect {0} &&
+                            binsof(AP_SUB) intersect {1} && (binsof(A.zero) && binsof(B.zero));
     }
     
     CLZ_WITH_CORNERS: cross AP_CLZ, A {
