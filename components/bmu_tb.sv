@@ -16,7 +16,7 @@ end
 
 bmu_interface intf(clk);
 
-BMU dut (
+Bit_Manipulation_Unit dut (
     .clk(intf.clk),
     .rst_l(intf.rst_l),
     .scan_mode(intf.scan_mode),
