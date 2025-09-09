@@ -14,13 +14,14 @@ VERBOSITY = UVM_MEDIUM
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 # Only the essential files for BMU
-DESIGN_FILE = $(COMP_DIR)/BMU.sv
+# DESIGN_FILE = $(COMP_DIR)/BMU.sv
+RTL_DESIGN_FILES = $(RTL_DIR)/rtl_def.sv $(RTL_DIR)/rtl_defines.sv $(RTL_DIR)/rtl_lib.sv $(RTL_DIR)/rtl_pdef.sv $(RTL_DIR)/Bit_Manibulation_Unit.sv
 INTERFACE_FILE = $(COMP_DIR)/bmu_interface.sv 
 PACKAGE_FILE = $(COMP_DIR)/bmu_pkg.sv
 TB_FILE = $(COMP_DIR)/bmu_tb.sv
 
-# Simple file list - only 4 files instead of 20+!
-ALL_FILES = $(DESIGN_FILE) $(INTERFACE_FILE) $(PACKAGE_FILE) $(TB_FILE)
+# File list with RTL design files instead of single BMU.sv
+ALL_FILES = $(RTL_DESIGN_FILES) $(INTERFACE_FILE) $(PACKAGE_FILE) $(TB_FILE)
 
 # Xrun flags
 XRUN_FLAGS = -uvm -sv -access +rwc -coverage all -covwork coverage_db

@@ -23,6 +23,7 @@ task body();
       });
       req.ap = 0;
       req.ap.sh3add = 1;
+      req.ap.zba = 1;
       finish_item(req);
     end
 
@@ -51,6 +52,7 @@ task body();
       });
       req.ap = 0;
       req.ap.sh3add = 1;
+      req.ap.zba = 1;
       finish_item(req);
     end
     
@@ -77,6 +79,7 @@ task body();
     req.b_in = 32'h00000000;  // All zeros
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -86,6 +89,7 @@ task body();
     req.b_in = 32'h00000000;  // All zeros
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -95,6 +99,7 @@ task body();
     req.b_in = 32'hFFFFFFFF;  // All ones
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -104,6 +109,7 @@ task body();
     req.b_in = 32'hFFFFFFFF;  // All ones
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -113,6 +119,7 @@ task body();
     req.b_in = 32'h00000000;  // All zeros
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -122,6 +129,7 @@ task body();
     req.b_in = 32'h55555555;  // Alternating pattern (01010101...)
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -131,6 +139,7 @@ task body();
     req.b_in = 32'h55555555;  // Alternating pattern (01010101...)
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -140,6 +149,7 @@ task body();
     req.b_in = 32'h00000000;  // All zeros
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -149,6 +159,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Alternating pattern (10101010...)
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -158,6 +169,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Alternating pattern (10101010...)
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -167,6 +179,7 @@ task body();
     req.b_in = 32'hAAAAAAAA;  // Alternating pattern 2
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -176,6 +189,7 @@ task body();
     req.b_in = 32'h55555555;  // Alternating pattern 1
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -196,6 +210,7 @@ task body();
     req.b_in = 32'h0000002A;  // b = 42
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -205,6 +220,7 @@ task body();
     req.b_in = 32'h00000000;  // b = 0
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -216,6 +232,7 @@ task body();
     req.b_in = 32'h00000001;  // Small addition
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
     
@@ -225,6 +242,7 @@ task body();
     req.b_in = 32'h00000001;  // Small addition
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 
@@ -234,6 +252,7 @@ task body();
     req.b_in = 32'h7FFFFFFF;  
     req.ap = 0;
     req.ap.sh3add = 1;
+    req.ap.zba = 1;
     start_item(req);
     finish_item(req);
 

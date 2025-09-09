@@ -45,6 +45,7 @@ task body();
           valid_in == 1;
       });
       req.ap = 0;
+      req.csr_ren_in = 0;
       req.ap.csr_write = 1;
       req.ap.csr_imm = 1;
       finish_item(req);
@@ -61,6 +62,7 @@ task body();
             valid_in == 1;
         });
         req.ap = 0;
+        req.csr_ren_in = 0;
         req.ap.csr_write = 1;
         finish_item(req);
     end
