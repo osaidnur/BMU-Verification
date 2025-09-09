@@ -15,9 +15,7 @@ struct packed {
   logic csr_imm;
 
   logic zbb;
-  logic zbp;
   logic zba;
-  logic zbs;
 
   logic land;
   logic lxor;
