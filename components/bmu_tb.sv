@@ -49,22 +49,6 @@ always_comb begin
     dut_ap.packu     = intf.ap.packu;
     dut_ap.gorc      = intf.ap.gorc;
     
-    // Note: zbp and zbs are group control signals in your interface, 
-    // but the RTL parameters show ZBP is disabled (5'h00), so packu won't work
-    // ZBS is enabled, so bext should work
-    
-    // Don't map zbp/zbs group signals - RTL uses individual control bits only
-    // The RTL parameters control which instruction groups are available:
-    // BITMANIP_ZBA = 1 (enabled) - sh1add, sh2add, sh3add  
-    // BITMANIP_ZBB = 1 (enabled) - clz, ctz, cpop, min, max, etc.
-    // BITMANIP_ZBC = 1 (enabled) - carry-less multiply
-    // BITMANIP_ZBP = 0 (disabled) - pack operations including packu
-    // BITMANIP_ZBS = 1 (enabled) - single bit operations like bext
-    
-    // For missing signals that your interface doesn't have but RTL expects,
-    // they remain 0. These include: ctz, siext_b, max, pack, packh, ror, grev, 
-    // bset, bclr, binv, sh1add, sh2add, lor, srl, beq, bne, blt, bge, 
-    // jal, predict_t, predict_nt
 end
 
 Bit_Manipulation_Unit dut (
