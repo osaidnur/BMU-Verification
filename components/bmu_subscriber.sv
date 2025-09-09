@@ -402,6 +402,7 @@ function void report_phase(uvm_phase phase);
     $sformatf("Input Operand Coverage - A: %.2f%%, B: %.2f%%", 
               bmuCoverage.A.get_coverage(), bmuCoverage.B.get_coverage()), UVM_MEDIUM);
     
+    
     // Instruction-specific coverage with corner cases
     `uvm_info(get_type_name,  
     $sformatf("=== INSTRUCTION-SPECIFIC CORNER CASE COVERAGE ==="), UVM_MEDIUM);
