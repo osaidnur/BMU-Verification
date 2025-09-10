@@ -5,7 +5,7 @@ package bmu_pkg;
   // Include sequence item first (foundational type)
   // `include "bmu_interface.sv"
   `include "bmu_sequence_item.sv"
-  `include "bmu_reference_model.sv"
+  `include "../dut_rm/bmu_reference_model.sv"
   
   // Include sequences (they depend on sequence_item)
   `include "../sequences/bmu_reset_sequence.sv"
@@ -30,13 +30,13 @@ package bmu_pkg;
 
 
   // Include components (they depend on sequence_item and sequences)
-  `include "bmu_sequencer.sv"
-  `include "bmu_driver.sv"
-  `include "bmu_monitor.sv"
-  `include "bmu_agent.sv"
-  `include "bmu_subscriber.sv"
-  `include "bmu_scoreboard.sv"
-  `include "bmu_environment.sv"
+  `include "env/bmu_sequencer.sv"
+  `include "env/bmu_driver.sv"
+  `include "env/bmu_monitor.sv"
+  `include "env/bmu_agent.sv"
+  `include "env/bmu_subscriber.sv"
+  `include "env/bmu_scoreboard.sv"
+  `include "env/bmu_environment.sv"
 
   // Include tests (they depend on environment and sequences)
   `include "../tests/bmu_csr_write_test.sv"
