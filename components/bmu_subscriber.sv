@@ -73,9 +73,7 @@ covergroup bmuCoverage;
     
     // Extension controls
     AP_ZBB: coverpoint sub.ap.zbb;
-    AP_ZBP: coverpoint sub.ap.zbp;
     AP_ZBA: coverpoint sub.ap.zba;
-    AP_ZBS: coverpoint sub.ap.zbs;
 
     AP_UNSIGN: coverpoint sub.ap.unsign;
     AP_SUB: coverpoint sub.ap.sub;
