@@ -385,5 +385,3 @@ Coming soon: Detailed coverage reports and performance metrics.
 ![Made with SystemVerilog](https://img.shields.io/badge/Made%20with-SystemVerilog-blue)
 ![UVM Methodology](https://img.shields.io/badge/UVM-Methodology-green)
 ![RISC-V Compatible](https://img.shields.io/badge/RISC--V-Compatible-orange)
-
-#### Happy Verification! 🚀
