@@ -127,8 +127,16 @@ task body();
     req.ap.rol = 1;
     start_item(req);
     finish_item(req);
-    
 
+    // Test 7: Rotate by 31 bits with b_in all ones
+    `uvm_info(get_type_name(), "[Directed Test 7] Rotate by 31 bits with b_in all ones (0xFFFFFFFF)", UVM_LOW);
+    req.a_in = 32'h000FABCD;
+    req.b_in = 32'hFFFFFFFF;  // Rotate by  31 bits
+    req.ap = 0;
+    req.ap.rol = 1;
+    start_item(req);
+    finish_item(req);
+    
     // Add idle cycles to ensure all transactions are completed
     repeat(2) begin
       start_item(req);

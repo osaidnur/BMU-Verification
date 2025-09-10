@@ -1,8 +1,8 @@
 class bmu_sequence_item extends uvm_sequence_item;
 // inputs
 rand logic rst_l ;
-rand logic signed [31:0] a_in;
-rand logic signed [31:0] b_in;
+rand logic [31:0] a_in;
+rand logic [31:0] b_in;
 rand logic scan_mode ;
 rand logic valid_in ;
 rand logic csr_ren_in;
@@ -33,7 +33,7 @@ rand struct packed {
 } ap;
 
 // outputs
-logic signed [31:0] result_ff;
+logic [31:0] result_ff;
 logic error ;
 
 `uvm_object_utils_begin(bmu_sequence_item)

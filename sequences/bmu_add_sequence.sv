@@ -246,6 +246,15 @@ task body();
     start_item(req);
     finish_item(req);
 
+    // Test 17: Maximum positive in B operand (for coverage completeness)
+    `uvm_info(get_type_name(), "[Directed Test 17] Maximum positive in B - 0 + 0x7FFFFFFF", UVM_LOW);
+    req.a_in = 32'h00000000;  // Zero
+    req.b_in = 32'h7FFFFFFF;  // Maximum positive (2^31 - 1)
+    req.ap = 0;
+    req.ap.add = 1;
+    start_item(req);
+    finish_item(req);
+
     // Add idle cycles to ensure all transactions are completed
     repeat(2) begin
       start_item(req);

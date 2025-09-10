@@ -157,8 +157,17 @@ task body();
     req.ap = 0;
     req.ap.siext_h = 1;
     start_item(req);
-    finish_item(req);    
-        
+    finish_item(req);  
+
+  // Directed Test 7: Alternating pattern in lower 16 bits (negative)
+    `uvm_info(get_type_name(), "[Directed Test 7] SIEXT_H: Alternating pattern (0x0000AAAA) ", UVM_LOW);
+    req.a_in = 32'h0000AAAA;  // Lower 16 bits = 0xAAAA (negative)
+    req.b_in = 32'h0;
+    req.ap = 0;
+    req.ap.siext_h = 1;
+    start_item(req);
+    finish_item(req);  
+      
     // Add idle cycles to ensure all transactions are completed
     repeat(2) begin
       start_item(req);

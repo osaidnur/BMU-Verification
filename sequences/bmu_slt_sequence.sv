@@ -270,6 +270,76 @@ task body();
     start_item(req);
     finish_item(req);
 
+    // ==========================================================================
+    // ==================== Additional Coverage Cases ===================
+    // ==========================================================================
+    
+    // Test 18: Negative vs Zero (signed)
+    `uvm_info(get_type_name(), "[Directed Test 18] SLT Signed - Negative vs Zero", UVM_LOW);
+    req.a_in = 32'hFFFFFFF0;  // Negative value (-16)
+    req.b_in = 32'h00000000;  // Zero
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: negative < 0 is true
+    start_item(req);
+    finish_item(req);
+
+    // Test 19: Negative vs All Ones (signed)
+    `uvm_info(get_type_name(), "[Directed Test 19] SLT Signed - Negative vs All Ones", UVM_LOW);
+    req.a_in = 32'hFFFFFFF0;  // Negative value (-16)
+    req.b_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: -16 < -1 is true
+    start_item(req);
+    finish_item(req);
+
+    // Test 20: All Ones vs Positive (signed)
+    `uvm_info(get_type_name(), "[Directed Test 20] SLT Signed - All Ones vs Positive", UVM_LOW);
+    req.a_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.b_in = 32'h00000010;  // Positive value (16)
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: -1 < 16 is true
+    start_item(req);
+    finish_item(req);
+
+    // Test 21: All Ones vs Negative (signed)
+    `uvm_info(get_type_name(), "[Directed Test 21] SLT Signed - All Ones vs Negative", UVM_LOW);
+    req.a_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.b_in = 32'hFFFFFFF0;  // Negative value (-16)
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: -1 < -16 is false
+    start_item(req);
+    finish_item(req);
+
+    // Test 22: All Ones vs All Ones (signed)
+    `uvm_info(get_type_name(), "[Directed Test 22] SLT Signed - All Ones vs All Ones", UVM_LOW);
+    req.a_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.b_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: -1 < -1 is false (equal)
+    start_item(req);
+    finish_item(req);
+
+    // Test 23: All Ones vs Zeros (signed)
+    `uvm_info(get_type_name(), "[Directed Test 23] SLT Signed - All Ones vs Zeros", UVM_LOW);
+    req.a_in = 32'hFFFFFFFF;  // All ones (-1 in signed)
+    req.b_in = 32'h00000000;  // All zeros (0)
+    req.ap = 0;
+    req.ap.slt = 1;
+    req.ap.sub = 1;
+    req.ap.unsign = 0;  // Signed: -1 < 0 is true
+    start_item(req);
+    finish_item(req);
+
     // Add idle cycles to ensure all transactions are completed
     repeat(2) begin
       start_item(req);
