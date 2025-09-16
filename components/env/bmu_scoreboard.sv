@@ -9,7 +9,7 @@ endfunction: new
 // Reference model instance
 bmu_reference_model ref_model;
 
-// If DUT latency changes, override via config_db or set here.
+// If DUT latency changes, override via config_db or set here
 int unsigned latency = 1;
  
 // Pipeline of input transactions (one per cycle)
@@ -31,6 +31,7 @@ function void build_phase(uvm_phase phase);
       this.latency = latency;
 endfunction
 
+// Function to receive transactions from the monitor
 function void write(bmu_sequence_item req); 
     bmu_sequence_item in_tr;
     bmu_sequence_item ready;
@@ -42,7 +43,7 @@ function void write(bmu_sequence_item req);
       return;
     end
  
-    // Push current-cycle *inputs* into the pipe (gate with valid if you use bubbles)
+    // Push current-cycle *inputs* into the pipe - Their outputs will come on a later cycle
     in_tr = new();
     in_tr.a_in          = req.a_in;
     in_tr.b_in          = req.b_in;
@@ -55,7 +56,7 @@ function void write(bmu_sequence_item req);
     cmd_pipe.push_back(in_tr);
 
     // When we have enough history, pop the producer of today's result
-    if (cmd_pipe.size() > latency) begin // here cmd_pipe stores the history of the inputs and outputs
+    if (cmd_pipe.size() > latency) begin // here cmd_pipe stores the history of the inputs and outputs from the past cycle
         ready = cmd_pipe.pop_front(); // here we pop the front of the pipe
         
         // Attach the DUT outputs to the popped transaction (the transaction now has correct inputs and outputs)
@@ -119,41 +120,39 @@ task run_phase(uvm_phase phase);
     string active_msg;
 
     forever begin
-    wait(packetQueue.size>0);
-    packet = packetQueue.pop_front();
-    
-    // Get expected result from reference model
-    expected_result = ref_model.compute_result(packet);
-    
-    // Compare with DUT output
-    match = (packet.result_ff === expected_result.data) && 
-            (packet.error === expected_result.error);
+        wait(packetQueue.size>0);
+        packet = packetQueue.pop_front();
         
-    // Get a string of active signals
-    active_msg = get_active_signals(packet);
+        // Get expected result from reference model
+        expected_result = ref_model.compute_result(packet);
+        
+        // Compare with DUT output
+        match = (packet.result_ff === expected_result.data) && 
+                (packet.error === expected_result.error);
+            
+        // Get a string of active signals
+        active_msg = get_active_signals(packet);
 
-    // detailed info log
-    `uvm_info("Scoreboard", $sformatf("Validating packet with inputs: a_in=%0h, b_in=%0h, valid_in=%0b, csr_ren_in=%0b, csr_rddata_in=%0h, scan_mode=%0b, rst_l=%0b || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
-              packet.a_in, packet.b_in, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.scan_mode, packet.rst_l,
-               active_msg, packet.result_ff, packet.error), UVM_HIGH);
+        // detailed info log
+        `uvm_info("Scoreboard", $sformatf("Validating packet with inputs: a_in=%0h, b_in=%0h, valid_in=%0b, csr_ren_in=%0b, csr_rddata_in=%0h, scan_mode=%0b, rst_l=%0b || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
+                packet.a_in, packet.b_in, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.scan_mode, packet.rst_l,
+                active_msg, packet.result_ff, packet.error), UVM_HIGH);
 
-    // less detailed info log
-    `uvm_info("Scoreboard", $sformatf("Validating packet with Inputs: a_in=%0h, b_in=%0h || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
-              packet.a_in, packet.b_in, active_msg, packet.result_ff, packet.error), UVM_MEDIUM);
+        // less detailed info log
+        `uvm_info("Scoreboard", $sformatf("Validating packet with Inputs: a_in=%0h, b_in=%0h || Active signals: %s || Outputs: result_ff=%0h, error=%0b", 
+                packet.a_in, packet.b_in, active_msg, packet.result_ff, packet.error), UVM_MEDIUM);
 
-    
-    // Print comparison result
-    if (match) begin 
-        `uvm_info("PASS", $sformatf("------ :: Match :: ------ "), UVM_LOW);  
-        `uvm_info("MATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
-                  expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
-    end else begin 
-        `uvm_error("FAIL", $sformatf("------ :: Mismatch :: ------")); 
-        `uvm_info("MISMATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
-                  expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
-    end
+        // Print comparison result
+        if (match) begin 
+            `uvm_info("PASS", $sformatf("------ :: Match :: ------ "), UVM_LOW);  
+            `uvm_info("MATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
+                    expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
+        end else begin 
+            `uvm_error("FAIL", $sformatf("------ :: Mismatch :: ------")); 
+            `uvm_info("MISMATCH", $sformatf("Expected: result=%0h error=%0b, Got: result=%0h error=%0b", 
+                    expected_result.data, expected_result.error, packet.result_ff, packet.error), UVM_LOW); 
+        end
 
     end
 endtask
-
 endclass: bmu_scoreboard

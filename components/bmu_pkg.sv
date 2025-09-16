@@ -2,8 +2,7 @@ package bmu_pkg;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
   
-  // Include sequence item first (foundational type)
-  // `include "bmu_interface.sv"
+  // Include sequence item first
   `include "bmu_sequence_item.sv"
   `include "../dut_rm/bmu_reference_model.sv"
   
@@ -28,8 +27,7 @@ package bmu_pkg;
   `include "../sequences/bmu_errors_sequence.sv"
   `include "../sequences/bmu_valid_in_sequence.sv"
 
-
-  // Include components (they depend on sequence_item and sequences)
+  // Include components (they depend on sequence_item)
   `include "env/bmu_sequencer.sv"
   `include "env/bmu_driver.sv"
   `include "env/bmu_monitor.sv"
@@ -58,6 +56,5 @@ package bmu_pkg;
   `include "../tests/bmu_xor_test.sv"
   `include "../tests/bmu_errors_test.sv"
   `include "../tests/bmu_valid_in_test.sv"
-
   
 endpackage

@@ -20,9 +20,9 @@ endfunction
 
 task run_phase(uvm_phase phase);
     forever begin
-        // @(posedge vif.driver_mod.clk); //-> sample directly at clock edge
+        
+        // wait for a clock edge to sample the signals
         @(vif.monitor_cb);
-        // #20 ;  // Small delay to avoid race conditions, but stay within same clock cycle
         packet.a_in = vif.monitor_cb.a_in;
         packet.b_in = vif.monitor_cb.b_in;
         packet.rst_l = vif.monitor_cb.rst_l;
@@ -36,7 +36,7 @@ task run_phase(uvm_phase phase);
 
         `uvm_info("Monitor", $sformatf("the signals received from the DUT are: A = %d | B = %d | scan_mode= %b | valid_in = %b | csr_ren_in= %b | csr_rddata_in = %d | ap= %p | result_ff= %d | error= %b", packet.a_in, packet.b_in, packet.scan_mode, packet.valid_in, packet.csr_ren_in, packet.csr_rddata_in, packet.ap, packet.result_ff, packet.error), UVM_HIGH);
         
-        // packet.print();
+        // send the transaction to the scoreboard
         port.write(packet);
     end
 endtask

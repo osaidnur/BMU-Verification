@@ -234,29 +234,17 @@ covergroup bmuCoverage;
     
     CLZ_WITH_CORNERS: cross AP_CLZ, A {
         ignore_bins ignore_clz_inactive = binsof(AP_CLZ) intersect {0};
-        
-        // bins clz_zero = binsof(AP_CLZ) intersect {1} && binsof(A.zero);
-        // bins clz_ones = binsof(AP_CLZ) intersect {1} && binsof(A.ones);
-        // bins clz_max_pos = binsof(AP_CLZ) intersect {1} && binsof(A.max_pos);
-        // bins clz_patterns = binsof(AP_CLZ) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
     }
     
     CPOP_WITH_CORNERS: cross AP_CPOP, A {
         ignore_bins ignore_cpop_inactive = binsof(AP_CPOP) intersect {0};
-        
-        // bins cpop_zero = binsof(AP_CPOP) intersect {1} && binsof(A.zero);
-        // bins cpop_ones = binsof(AP_CPOP) intersect {1} && binsof(A.ones);
-        // bins cpop_patterns = binsof(AP_CPOP) intersect {1} && (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
-    }
+        }
     
     SIEXT_H_WITH_CORNERS: cross AP_SIEXT_H, A {
         ignore_bins ignore_siext_h_inactive = binsof(AP_SIEXT_H) intersect {0};
         ignore_bins alternate_patterns = binsof(AP_SIEXT_H) intersect {1} && 
                            (binsof(A.alt_pattern1) || binsof(A.alt_pattern2));
         
-        // bins siext_h_zero = binsof(AP_SIEXT_H) intersect {1} && binsof(A.zero);
-        // bins siext_h_ones = binsof(AP_SIEXT_H) intersect {1} && binsof(A.ones);
-        // bins siext_h_max_pos = binsof(AP_SIEXT_H) intersect {1} && binsof(A.max_pos);
         bins siext_h_patterns = binsof(AP_SIEXT_H) intersect {1} && 
                                (binsof(A) intersect {32'h0000AAAA} || binsof(A) intersect {32'h00005555});
     }
@@ -314,9 +302,6 @@ covergroup bmuCoverage;
     // CSR OPERATIONS COVERAGE - Simple unified cross for read and write
     // ===================================================================
     CSR_READ: cross CSR_REN_IN,AP_CSR_RDATA {
-        // Ignore invalid combinations
-        // ignore_bins ignore_invalid_trans = binsof(VALID_IN) intersect {0};
-        // ignore_bins ignore_A_B_max = (binsof(A.max_pos) || binsof(A.max_neg) || binsof(B.max_pos) || binsof(B.max_neg));
         
         // CSR Read operations with corner case data
         bins csr_read_zero_data = binsof(CSR_REN_IN) intersect {1} && binsof(AP_CSR_RDATA.zero);
@@ -374,6 +359,7 @@ function new(string name,uvm_component parent);
     sub = new(); 
 endfunction
 
+// Write method to capture the sequence item and sample coverage
 function void write (bmu_sequence_item t);
     sub.rst_l = t.rst_l;
     sub.a_in = t.a_in; 
