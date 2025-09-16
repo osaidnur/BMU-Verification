@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal SH3ADD operation", UVM_LOW);
+    
+    // ===========================================================================================
+    // ==================== Randomized Testing ===================================================
+    // ===========================================================================================
+
     // Normal SH3ADD operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal SH3ADD operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -27,19 +30,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] SH3ADD operation with constrained inputs to avoid overflow", UVM_LOW);
     // SH3ADD operations with smaller values to avoid overflow
+    `uvm_info(get_type_name(), "[Randomized Tests 2] SH3ADD operation with constrained inputs to avoid overflow", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -56,18 +48,9 @@ task body();
       finish_item(req);
     end
     
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
-    // ==================== Directed Testing for Key Bit Patterns ===================
+    // ===========================================================================================
+    // ==================== Directed Testing =====================================================
+    // ===========================================================================================
     
     // Test 1: All zeros in both operands
     `uvm_info(get_type_name(), "[Directed Test 1] SH3ADD: All zeros - (0 << 3) + 0 = 0", UVM_LOW);
@@ -183,7 +166,7 @@ task body();
     start_item(req);
     finish_item(req);
 
-        // Test 12: Mixed alternating patterns (reversed)
+    // Test 12: Mixed alternating patterns (reversed)
     `uvm_info(get_type_name(), "[Directed Test 12] SH3ADD: Mixed alternating patterns reversed - (0xAAAAAAAA << 3) + 0x55555555", UVM_LOW);
     req.a_in = 32'hAAAAAAAA;  // Alternating pattern 2
     req.b_in = 32'h55555555;  // Alternating pattern 1
@@ -192,17 +175,6 @@ task body();
     req.ap.zba = 1;
     start_item(req);
     finish_item(req);
-
-    // Add idle cycles to ensure all transactions are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
 
     // Test 13: Zero first operand - (0 << 3) + 42 = 42
     `uvm_info(get_type_name(), "[Directed Test 13] SH3ADD: (0 << 3) + 42 = 42", UVM_LOW);
@@ -223,10 +195,8 @@ task body();
     req.ap.zba = 1;
     start_item(req);
     finish_item(req);
-
-    // ==================== Directed Testing for Overflow Scenarios ===================
     
-    // Test 10: Intentional overflow case 1
+    // Test 15: Intentional overflow case 1
     `uvm_info(get_type_name(), "[Directed Test 15] Overflow Case 1", UVM_LOW);
     req.a_in = 32'h20000000;  // Large value that will overflow when shifted
     req.b_in = 32'h00000001;  // Small addition
@@ -236,7 +206,7 @@ task body();
     start_item(req);
     finish_item(req);
     
-    // Test 11: Intentional overflow case 2
+    // Test 16: Intentional overflow case 2
     `uvm_info(get_type_name(), "[Directed Test 16] Overflow Case 2", UVM_LOW);
     req.a_in = 32'hFFFFFFFF;  // Max value
     req.b_in = 32'h00000001;  // Small addition
@@ -246,7 +216,7 @@ task body();
     start_item(req);
     finish_item(req);
 
-    // Test 12: Large operands addition
+    // Test 17: Large operands addition
     `uvm_info(get_type_name(), "[Directed Test 17] Overflow Case 3", UVM_LOW);
     req.a_in = 32'h10000000;
     req.b_in = 32'h7FFFFFFF;  

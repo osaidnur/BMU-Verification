@@ -9,6 +9,10 @@ task body();
     bmu_sequence_item req;
     string instruction_names[];
     req = bmu_sequence_item::type_id::create("req");
+
+    // ==========================================================================================================
+    // ==================== Randomized Testing ==================================================================
+    // ==========================================================================================================
     
     // Random set of the control signals
     `uvm_info(get_type_name(), "[Randomized Tests] Random set of active signals", UVM_LOW);
@@ -22,7 +26,8 @@ task body();
         finish_item(req);
     end
 
-    // ==================== CSR Read Conflict Error Tests ===================
+    // ==================== CSR Read Conflict Error Tests ==========================================================
+    // CSR Read should not be active with any other instruction signal
     `uvm_info(get_type_name(), "[Test 1] CSR Conflicts: CSR Read + Individual Instructions", UVM_LOW);
     
     // CSR Read + each individual instruction
@@ -63,6 +68,10 @@ task body();
         finish_item(req);
     end
 
+    // ==========================================================================================================
+    // ===================== Directed Testing  ==================================================================
+    // ==========================================================================================================
+
     // sh3add Error Case
     `uvm_info(get_type_name(), "[Test 2] sh3add without zba", UVM_LOW);
     start_item(req);
@@ -76,8 +85,10 @@ task body();
     req.csr_ren_in = 0;
     finish_item(req);
 
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>>>> Invalid Two-Signal Combinations <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    // ==================== Invalid Two-Signal Combinations ===================
     // Test 3: land + lxor (two logical operations)
     `uvm_info(get_type_name(), "[Test 3: Invalid Pairs 1] land + lxor", UVM_LOW);
     start_item(req);
@@ -148,7 +159,10 @@ task body();
     req.csr_ren_in = 0;
     finish_item(req);
 
-    // ==================== Invalid Three-Signal Combinations ===================
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>> Invalid Three-Signal Combinations <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     // Test 8: slt + unsign + add (should be sub not add)
     `uvm_info(get_type_name(), "[Test 8: Invalid triplet 1] slt + unsign + add", UVM_LOW);
     start_item(req);
@@ -209,8 +223,10 @@ task body();
     req.csr_ren_in = 0;
     finish_item(req);
 
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>> Invalid Four and Five-Signal Combinations <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    // ==================== More Than 3 Active Signals ===================
     // 4 signals active
     `uvm_info(get_type_name(), "[Test 12] 4 Signals Active", UVM_LOW);
     start_item(req);
@@ -244,9 +260,11 @@ task body();
     req.csr_ren_in = 0;
     finish_item(req);
 
-
-    // ==================== Extension Flag Misuse ===================
-    // Extension flags without their required instructions
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>> Extension Flag Misuse <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   
+   // Extension flags without their required instructions
     `uvm_info(get_type_name(), "[Test 14] Testing extension flag zbb without land/lxor", UVM_LOW);
     start_item(req);
     void'(req.randomize() with {
@@ -258,7 +276,8 @@ task body();
     req.ap.zbb = 1; // zbb without land/lxor
     req.csr_ren_in = 0;
     finish_item(req);
-    
+
+    // zba without sh3add
     `uvm_info(get_type_name(), "[Test 15] Testing extension flag zba without sh3add", UVM_LOW);
     start_item(req);
     void'(req.randomize() with {
@@ -271,6 +290,7 @@ task body();
     req.csr_ren_in = 0;
     finish_item(req);
     
+    // unsign without slt
     `uvm_info(get_type_name(), "[Test 16] Testing unsign signal alone", UVM_LOW);
     start_item(req);
     void'(req.randomize() with {

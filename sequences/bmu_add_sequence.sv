@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal ADD operation", UVM_LOW);
+    
+    // ==========================================================================================================
+    // ==================== Randomized Testing ==================================================================
+    // ==========================================================================================================
+    
     // Normal ADD operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal ADD operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -26,19 +29,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] ADD operation with positive numbers", UVM_LOW);
     // ADD operations with positive numbers to avoid overflow
+    `uvm_info(get_type_name(), "[Randomized Tests 2] ADD operation with positive numbers", UVM_LOW);
     repeat(10)begin
       start_item(req);
       void'(req.randomize() with {
@@ -54,20 +46,8 @@ task body();
       finish_item(req);
     end
 
-     // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-
-    `uvm_info(get_type_name(), "[Randomized Tests 3] ADD operation with negative numbers", UVM_LOW);
     // ADD operations with negative numbers to avoid overflow
+    `uvm_info(get_type_name(), "[Randomized Tests 3] ADD operation with negative numbers", UVM_LOW);
     repeat(10)begin
       start_item(req);
       void'(req.randomize() with {
@@ -83,18 +63,9 @@ task body();
       finish_item(req);
     end
     
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
-    // ==================== Directed Testing  ===================
+    // ==========================================================================================================
+    // ==================== Directed Testing  ===================================================================
+    // ==========================================================================================================
     
     // Test 1: All zeros in both operands
     `uvm_info(get_type_name(), "[Directed Test 1] ADD: All zeros - 0 + 0 = 0", UVM_LOW);

@@ -10,9 +10,9 @@ task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
     
-    // ==================================================================================
-    // ==================== Randomized Testing ==========================================
-    // ==================================================================================
+    // =============================================================================================================
+    // ==================== Randomized Testing =====================================================================
+    // =============================================================================================================
 
     // Normal MIN operations with random inputs
     `uvm_info(get_type_name(), "[Randomized Tests 1] Normal MIN operation", UVM_LOW);
@@ -30,17 +30,6 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
     // MIN operations with one negative number
     `uvm_info(get_type_name(), "[Randomized Tests 2] MIN operation with positive and negative numbers", UVM_LOW);
     repeat(10)begin
@@ -57,20 +46,9 @@ task body();
       req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
-    
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
 
-    `uvm_info(get_type_name(), "[Randomized Tests 3] MIN operation with both positive numbers", UVM_LOW);
     // MIN operations with both positive numbers
+    `uvm_info(get_type_name(), "[Randomized Tests 3] MIN operation with both positive numbers", UVM_LOW);
     repeat(10)begin
       start_item(req);
       void'(req.randomize() with {
@@ -86,17 +64,6 @@ task body();
       req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
-    
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
     
     // Min operations with both negative numbers
     `uvm_info(get_type_name(), "[Randomized Tests 4] MIN operation with both negative numbers", UVM_LOW);
@@ -115,22 +82,10 @@ task body();
       req.ap.sub = 1;  // MIN requires SUB to be active
       finish_item(req);
     end
+    // =============================================================================================================
+    // ==================== Directed Testing =======================================================================
+    // =============================================================================================================
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    // ====================================================================================
-    // ==================== Directed Testing ==============================================
-    // ====================================================================================
-    
     // Directed Test 1: Both inputs are zero
     `uvm_info(get_type_name(), "[Directed Test 1] MIN: Both zeros ", UVM_LOW);
     req.rst_l = 1;

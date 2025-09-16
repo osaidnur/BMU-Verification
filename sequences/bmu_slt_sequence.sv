@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal SLT operation (signed)", UVM_LOW);
+    
+    // =============================================================================================
+    // ==================== Randomized Testing =====================================================
+    // =============================================================================================
+
     // Normal SLT operations with random inputs (signed comparison)
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal SLT operation (signed)", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -28,19 +31,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] Normal SLT operation (unsigned)", UVM_LOW);
     // Normal SLT operations with random inputs (unsigned comparison)
+    `uvm_info(get_type_name(), "[Randomized Tests 2] Normal SLT operation (unsigned)", UVM_LOW);
     repeat(15)begin
       start_item(req);
       void'(req.randomize() with {
@@ -56,21 +48,14 @@ task body();
       finish_item(req);
     end
     
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    // ========================================================================
-    // ==================== Directed Testing for Signed SLT ===================
-    // ========================================================================
+    // =============================================================================================
+    // ==================== Directed Testing  ======================================================
+    // =============================================================================================
     
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>>> Directed Tests for Signed SLT <<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     // Test 1: Equal values (signed) - should return any of them
     `uvm_info(get_type_name(), "[Directed Test 1] SLT Signed - Equal operands", UVM_LOW);
     req.rst_l = 1;
@@ -174,7 +159,6 @@ task body();
     start_item(req);
     finish_item(req);
 
-
     // Test 10: Maximum positive vs minimum negative (signed)
     `uvm_info(get_type_name(), "[Directed Test 10] SLT Signed - Max positive vs Min negative", UVM_LOW);
     req.a_in = 32'h7FFFFFFF;  // Max positive (2^31 - 1)
@@ -185,7 +169,6 @@ task body();
     req.ap.unsign = 0;  // Signed
     start_item(req);
     finish_item(req);
-
 
     // Test 11: All zeros vs all ones (signed)
     `uvm_info(get_type_name(), "[Directed Test 11] all zeros vs. all ones", UVM_LOW);
@@ -198,7 +181,6 @@ task body();
     start_item(req);
     finish_item(req);
 
-
     // Test 12: Alternating patterns (signed)
     `uvm_info(get_type_name(), "[Directed Test 12] SLT Signed - Alternating patterns", UVM_LOW);
     req.a_in = 32'h55555555;  // Pattern 1
@@ -210,10 +192,10 @@ task body();
     start_item(req);
     finish_item(req);
 
-    // ==========================================================================
-    // ==================== Directed Testing for Unsigned SLT ===================
-    // ==========================================================================
-    
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>>> Directed Tests for Unsigned SLT <<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     // Test 13: Equal values (unsigned) - should return 0
     `uvm_info(get_type_name(), "[Directed Test 13] SLT Unsigned - Equal Operands", UVM_LOW);
     req.a_in = 32'h12345678;
@@ -270,9 +252,9 @@ task body();
     start_item(req);
     finish_item(req);
 
-    // ==========================================================================
-    // ==================== Additional Coverage Cases ===================
-    // ==========================================================================
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>>>> Additional Directed Tests for Signed SLT <<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
     // Test 18: Negative vs Zero (signed)
     `uvm_info(get_type_name(), "[Directed Test 18] SLT Signed - Negative vs Zero", UVM_LOW);
@@ -352,5 +334,4 @@ task body();
     end
     
 endtask: body
-
 endclass: bmu_slt_sequence

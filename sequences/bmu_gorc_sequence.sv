@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal GORC operation", UVM_LOW);
+    
+    // ===========================================================================================================
+    // ==================== Randomized Testing ===================================================================
+    // ===========================================================================================================
+
     // Normal GORC operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal GORC operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -28,19 +31,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] GORC with single bit patterns", UVM_LOW);
     // GORC operations with single bits set in various bytes
+    `uvm_info(get_type_name(), "[Randomized Tests 2] GORC with single bit patterns", UVM_LOW);
     repeat(10)begin
       start_item(req);
       void'(req.randomize() with {
@@ -57,19 +49,10 @@ task body();
       req.ap.gorc = 1;
       finish_item(req);
     end
-    
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-  
-    // ==================== Directed Testing for Edge Cases ===================
+
+    // =============================================================================================================
+    // ==================== Directed Testing  ======================================================================
+    // =============================================================================================================
     
     // Directed Test 1: All bytes zero
     `uvm_info(get_type_name(), "[Directed Test 1] GORC: All bytes zero ", UVM_LOW);
