@@ -3,10 +3,10 @@
 #######################################################################################
 
 # Directories
-COMP_DIR = components
-SEQ_DIR = sequences
-TEST_DIR = tests
-RTL_DIR = rtl
+COMP_DIR = ../components
+SEQ_DIR = ../sequences
+TEST_DIR = ../tests
+RTL_DIR = ../rtl
 
 #IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 TEST_NAME = bmu_regression_test
