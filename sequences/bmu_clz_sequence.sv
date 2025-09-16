@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] CLZ: Normal CLZ operation", UVM_LOW);
+    
+    // ==========================================================================================================
+    // ==================== Randomized Testing ==================================================================
+    // ==========================================================================================================
+
     // Normal CLZ operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] CLZ: Normal CLZ operation", UVM_LOW);
     repeat(25)begin
       start_item(req);
       void'(req.randomize() with {
@@ -26,25 +29,12 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
+    // ==========================================================================================================
+    // ==================== Directed Testing ====================================================================
+    // ==========================================================================================================
 
-    // ===============================================================================
-    // ==================== Directed Testing for Each Bit Position ===================
-    // ===============================================================================
-
+    // Test 1: This tests CLZ values from 0 to 31
     `uvm_info(get_type_name(), "[Directed Test 1] CLZ: single bit set at each position", UVM_LOW);
-
-    // Test CLZ for single bit set at each position (31 down to 0)
-    // This tests CLZ values from 0 to 31
     for(int i = 31; i >= 0; i--) begin
       req.rst_l = 1;
       req.scan_mode = 0;
@@ -57,21 +47,6 @@ task body();
       start_item(req);
       finish_item(req);
     end
-
-    // Add idle cycles 
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    // ===============================================================================
-    // ==================== Directed Testing for Edge Cases ==========================
-    // ===============================================================================
 
     // Test 2: All zeros
     `uvm_info(get_type_name(), "[Directed Test 2] CLZ: the input is all zeros", UVM_LOW);

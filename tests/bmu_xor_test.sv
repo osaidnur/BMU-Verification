@@ -19,7 +19,6 @@ task run_phase(uvm_phase phase);
     bmu_sequence = bmu_xor_sequence::type_id::create("bmu_xor_sequence");
     reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
     reset_seq.start(env.agent.sequencer);
-    // # 10;
     bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of XOR Test =========", UVM_LOW);

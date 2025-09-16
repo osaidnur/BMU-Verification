@@ -54,44 +54,32 @@ task run_phase(uvm_phase phase);
     errors_sequence = bmu_errors_sequence::type_id::create("bmu_errors_sequence");
     valid_in_sequence = bmu_valid_in_sequence::type_id::create("bmu_valid_in_sequence");
 
+    // reset sequence
     reset_seq.start(env.agent.sequencer);
-    // # 10;
-    csr_write_sequence.start(env.agent.sequencer);
-    // # 10;
-    add_sequence.start(env.agent.sequencer);
-    // # 10;
-    and_sequence.start(env.agent.sequencer);
-    // # 10;
-    bext_sequence.start(env.agent.sequencer);
-    // # 10;
-    clz_sequence.start(env.agent.sequencer);
-    // # 10;
-    cpop_sequence.start(env.agent.sequencer);
-    // # 10;
-    gorc_sequence.start(env.agent.sequencer);
-    // # 10;
-    min_sequence.start(env.agent.sequencer);
-    // # 10;
-    packu_sequence.start(env.agent.sequencer);
-    // # 10;
-    rol_sequence.start(env.agent.sequencer);
-    // # 10;
-    sh3add_sequence.start(env.agent.sequencer);
-    // # 10;
-    siext_h_sequence.start(env.agent.sequencer);
-    // # 10;
-    sll_sequence.start(env.agent.sequencer);
-    // # 10;
-    slt_sequence.start(env.agent.sequencer);
-    // # 10;
-    sra_sequence.start(env.agent.sequencer);
-    // # 10;
-    xor_sequence.start(env.agent.sequencer);
-    // # 10;
-    valid_in_sequence.start(env.agent.sequencer);
-    // # 10;
-    errors_sequence.start(env.agent.sequencer);
 
+    // individual sequences - 16 instruction
+    csr_write_sequence.start(env.agent.sequencer);
+    add_sequence.start(env.agent.sequencer);
+    and_sequence.start(env.agent.sequencer);
+    bext_sequence.start(env.agent.sequencer);
+    clz_sequence.start(env.agent.sequencer);
+    cpop_sequence.start(env.agent.sequencer);
+    gorc_sequence.start(env.agent.sequencer);
+    min_sequence.start(env.agent.sequencer);
+    packu_sequence.start(env.agent.sequencer);
+    rol_sequence.start(env.agent.sequencer);
+    sh3add_sequence.start(env.agent.sequencer);
+    siext_h_sequence.start(env.agent.sequencer);
+    sll_sequence.start(env.agent.sequencer);
+    slt_sequence.start(env.agent.sequencer);
+    sra_sequence.start(env.agent.sequencer);
+    xor_sequence.start(env.agent.sequencer);
+    
+    // valid in sequence
+    valid_in_sequence.start(env.agent.sequencer);
+    
+    // errors sequence
+    errors_sequence.start(env.agent.sequencer);
 
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of Regression Test =========", UVM_LOW);

@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal BEXT operation", UVM_LOW);
+    
+    // ===========================================================================================================
+    // ==================== Randomized Testing ===================================================================
+    // ===========================================================================================================
+    
     // Normal BEXT operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal BEXT operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -27,19 +30,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] BEXT operation with specific bit patterns", UVM_LOW);
     // BEXT operations with specific bit patterns
+    `uvm_info(get_type_name(), "[Randomized Tests 2] BEXT operation with specific bit patterns", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -55,23 +47,13 @@ task body();
       finish_item(req);
     end
     
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
-    // ==================== Directed Testing ===================
-    
-    `uvm_info(get_type_name(), "[Directed Tests 1] Bit extraction for each bit position (0-31) with test pattern 0x12345678", UVM_LOW);
+    // ============================================================================================================
+    // ==================== Directed Testing ======================================================================
+    // ============================================================================================================
     
     // Test bit extraction for each bit position using test pattern 0x12345678
-    // 0x12345678 = 0001_0010_0011_0100_0101_0110_0111_1000 in binary
+    `uvm_info(get_type_name(), "[Directed Tests 1] Bit extraction for each bit position (0-31) with test pattern 0x12345678", UVM_LOW);
+    
     for(int i = 0; i <= 31; i++) begin
       req.rst_l = 1;
       req.scan_mode = 0;
@@ -85,17 +67,6 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles 
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
     // Directed Test 2: Extract from all zeros
     `uvm_info(get_type_name(), "[Directed Test 2] Extract from all zeros", UVM_LOW);
     req.rst_l = 1;
@@ -109,7 +80,6 @@ task body();
     start_item(req);
     finish_item(req);
     
-
     // Directed Test 3: Extract from all ones
    `uvm_info(get_type_name(), "[Directed Test 3] Extract from all ones", UVM_LOW);
     req.a_in = 32'hFFFFFFFF;  // All ones
@@ -119,7 +89,6 @@ task body();
     start_item(req);
     finish_item(req);
     
-
     // Directed Test 4: Single bit set at LSB
     `uvm_info(get_type_name(), "[Directed Test 4] Extract Single bit set at LSB ", UVM_LOW);
     req.a_in = 32'h00000001;  // Only LSB set

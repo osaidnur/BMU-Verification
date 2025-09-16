@@ -8,10 +8,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal CSR Read operation", UVM_LOW);
+    
+    // =============================================================================================================
+    // ==================== Randomized Testing =====================================================================
+    // =============================================================================================================
+    
     // Normal CSR Read operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal CSR Read operation", UVM_LOW);
     repeat(15)begin
       start_item(req);
       void'(req.randomize() with {
@@ -24,19 +27,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
-    `uvm_info(get_type_name(), "[Randomized Tests 2] CSR Write operation with csr_imm=1", UVM_LOW);
     // Normal CSR Write operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 2] CSR Write operation with csr_imm=1", UVM_LOW);
     repeat(15)begin
       start_item(req);
       void'(req.randomize() with {
@@ -51,9 +43,8 @@ task body();
       finish_item(req);
     end
 
-
-    `uvm_info(get_type_name(), "[Randomized Tests 3] CSR Write operation with csr_imm=0", UVM_LOW);
     // Normal CSR Write operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 3] CSR Write operation with csr_imm=0", UVM_LOW);
     repeat(15)begin
         start_item(req);
         void'(req.randomize() with {
@@ -67,11 +58,13 @@ task body();
         finish_item(req);
     end
 
-
-
-    // ==================== Directed Testing for Edge Cases ===================
+    // ========================================================================================================================
+    // ==================== Directed Testing ==================================================================================
+    // ======================================================================================================================== 
     
-    // Directed Test for read operations 
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>> Directed Tests for read operations <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 
     // Directed Test 1: Read from CSR with minimum value
     `uvm_info(get_type_name(), "[Directed Test 1] CSR Read: zeros", UVM_LOW);
@@ -98,9 +91,9 @@ task body();
     req.ap = 0;
     finish_item(req);
 
-
-
-    // Directed Test for write operations
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>>> Directed Tests for write operations <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     // Directed Test 1: Write to CSR with minimum value
     `uvm_info(get_type_name(), "[Directed Test 1] CSR Write: Minimum value", UVM_LOW);
@@ -124,7 +117,6 @@ task body();
     req.ap.csr_write = 1;
     finish_item(req);
     
-
     // Directed Test 3: Write to CSR with alternating bit pattern
     `uvm_info(get_type_name(), "[Directed Test 3] CSR Write: Alternating bit pattern", UVM_LOW);
     start_item(req);
@@ -145,7 +137,6 @@ task body();
     req.ap.csr_imm = 1;
     finish_item(req);
 
-
     // Directed Test 5: Write to CSR with immediate mode - maximum value
     `uvm_info(get_type_name(), "[Directed Test 5] CSR Write: Immediate mode - ones", UVM_LOW);
     start_item(req);
@@ -155,7 +146,6 @@ task body();
     req.ap.csr_write = 1;
     req.ap.csr_imm = 1;
     finish_item(req);
-
 
     // Directed Test 6: Write to CSR with immediate mode - alternating bit pattern
     `uvm_info(get_type_name(), "[Directed Test 6] CSR Write: Immediate mode - Alternating bit pattern", UVM_LOW);

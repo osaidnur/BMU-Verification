@@ -9,11 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Valid In Control Testing ===================
-    `uvm_info(get_type_name(), "[Valid In Test 1] Perform ADD operation - valid_in is enabled", UVM_LOW);
     
+    // ==========================================================================================================
+    // ==================== Valid In Control Testing ============================================================
+    // ==========================================================================================================
+
     // First, perform a normal ADD operation
+    `uvm_info(get_type_name(), "[Valid In Test 1] Perform ADD operation - valid_in is enabled", UVM_LOW);
     start_item(req);
     void'(req.randomize() with {
         rst_l == 1;
@@ -27,7 +29,7 @@ task body();
     req.ap.add = 1;
     finish_item(req);
     
-    
+
     // Now disable valid_in - the output should go to zero
     `uvm_info(get_type_name(), "[Valid In Test 2] Disable valid_in", UVM_LOW);
     start_item(req);
@@ -42,10 +44,10 @@ task body();
     req.ap = 0;
     req.ap.add = 1;  // Operation signals still active
     finish_item(req);
-    
-    `uvm_info(get_type_name(), "[Valid In Test 3] Re-enable valid_in with new operation", UVM_LOW);
+
     
     // Re-enable valid_in with a new operation (AND)
+    `uvm_info(get_type_name(), "[Valid In Test 3] Re-enable valid_in with new operation", UVM_LOW);
     start_item(req);
     void'(req.randomize() with {
         rst_l == 1;
@@ -73,7 +75,6 @@ task body();
         req.ap = 0;  // No operations active
         finish_item(req);
     end
-
 
     // Add idle cycles
     repeat(2) begin

@@ -1,25 +1,24 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
+
 import bmu_pkg::*;  // Import our package with all UVM components
+import rtl_pkg::*;// import the RTL package to access rtl_alu_pkt_t
 
 module bmu_tb;
 logic clk;
 
+// clock generation
 initial begin
     clk = 0;
-    // #5;
     forever begin
        #5 clk = ~clk; 
     end
-
 end
 
+// instantiate the interface
 bmu_interface intf(clk);
 
-// import the RTL package to access rtl_alu_pkt_t
-import rtl_pkg::*;
-
-// this dut will be connected to the interface signals
+// these ap signals need to be mapped to the DUT struct
 rtl_alu_pkt_t dut_ap;
 
 always_comb begin
@@ -48,9 +47,9 @@ always_comb begin
     dut_ap.min       = intf.ap.min;
     dut_ap.packu     = intf.ap.packu;
     dut_ap.gorc      = intf.ap.gorc;
-    
 end
 
+// instantiate the DUT
 Bit_Manipulation_Unit dut (
     .clk(intf.clk),
     .rst_l(intf.rst_l),
@@ -73,17 +72,5 @@ end
 initial begin
     run_test("bmu_add_test");
 end
-
-// initial begin
-// // $fsdbDumpfile("debug.fsdb"); // Set the output file for waveforms 
-// // $fsdbDumpvars; // Dump all variables to the waveform file 
-// // $fsdbDumpvars("+mda"); // Include multidimensional array data 
-// // $fsdbDumpvars("+struct"); // Include struct data 
-// // $fsdbDumpvars("+all"); // Include all data for debugging 
-// // $fsdbDumpon; // Turn on waveform recording 
-// $shm_open("debug.shm"); // Open shared memory for UVM debug data
-// $shm_probe(0, "ALL"); // Probe all data for shared memory
-
-// end
 
 endmodule

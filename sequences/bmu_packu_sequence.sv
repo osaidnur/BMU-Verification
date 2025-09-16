@@ -10,13 +10,9 @@ task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
 
-    // PACKU Operation: Pack the upper 16 bits of both inputs into a 32-bit result
-    // Result = {b_in[31:16], a_in[31:16]}
-    // Lower 16 bits of both inputs are ignored
-
-    // =================================================================================  
-    // ==================== Randomized Testing =========================================
-    // =================================================================================
+    // ============================================================================================================ 
+    // ==================== Randomized Testing ====================================================================
+    // ============================================================================================================
     
     // Normal PACKU operations with random inputs
     `uvm_info(get_type_name(), "[Randomized Tests ] Normal PACKU operation", UVM_LOW);
@@ -33,20 +29,9 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    // =================================================================================
-    // ==================== Directed Testing ===========================================
-    // =================================================================================
+    // ==========================================================================================================
+    // ==================== Directed Testing ====================================================================
+    // ==========================================================================================================
     
     // Directed Test 1: Both inputs all zeros
     `uvm_info(get_type_name(), "[Directed Test 1] PACKU: Both zeros ", UVM_LOW);
@@ -151,8 +136,6 @@ task body();
     start_item(req);
     finish_item(req);
 
-    
-    
     // Directed Test 12: Byte boundaries in upper halfwords
     `uvm_info(get_type_name(), "[Directed Test 12] PACKU: Byte boundaries ", UVM_LOW);
     req.a_in = 32'h00FF1234;  // upper = 0x00FF
@@ -171,7 +154,6 @@ task body();
     start_item(req);
     finish_item(req);
     
-
     // Add idle cycles to ensure all transactions are completed
     repeat(2) begin
       start_item(req);

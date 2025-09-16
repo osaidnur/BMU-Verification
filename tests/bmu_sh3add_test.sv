@@ -19,7 +19,6 @@ task run_phase(uvm_phase phase);
     bmu_sequence = bmu_sh3add_sequence::type_id::create("bmu_sh3add_sequence");
     reset_seq = bmu_reset_sequence::type_id::create("reset_seq");
     reset_seq.start(env.agent.sequencer);
-    // # 10;
     bmu_sequence.start(env.agent.sequencer);
     phase.drop_objection(this);
     `uvm_info(get_type_name, "========= End of SH3ADD Test =========", UVM_LOW);

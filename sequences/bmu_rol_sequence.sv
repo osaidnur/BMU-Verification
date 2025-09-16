@@ -10,9 +10,12 @@ task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
       
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal ROL operation", UVM_LOW);
+    // ===========================================================================================
+    // ==================== Randomized Testing ===================================================
+    // ===========================================================================================
+
     // Normal ROL operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests 1] Normal ROL operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -27,19 +30,8 @@ task body();
       finish_item(req);
     end
 
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-
-    `uvm_info(get_type_name(), "[Randomized Tests 2] ROL operation with specific bit patterns", UVM_LOW);
     // ROL operations with specific bit patterns
+    `uvm_info(get_type_name(), "[Randomized Tests 2] ROL operation with specific bit patterns", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -55,19 +47,10 @@ task body();
       finish_item(req);
     end
     
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
-    
-    // ==================== Directed Testing for Rotate by 0 bits ===================
-    
+    // ===========================================================================================
+    // ==================== Directed Testing =====================================================
+    // ===========================================================================================
+
     // Test 1: Rotate by 0 bits with all 1s
     `uvm_info(get_type_name(), "[Directed Test 1] Rotate by 0 bits with all ones (0xFFFFFFFF)", UVM_LOW);
     req.rst_l = 1;
@@ -98,8 +81,6 @@ task body();
     req.ap.rol = 1;
     start_item(req);
     finish_item(req);
-
-    // ==================== Directed Testing for Rotate by 31 bits ===================
     
     // Test 4: Rotate by 31 bits with all 1s
     `uvm_info(get_type_name(), "[Directed Test 4] Rotate by 31 bits with all ones (0xFFFFFFFF)", UVM_LOW);

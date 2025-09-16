@@ -9,10 +9,13 @@ endfunction: new
 task body();
     bmu_sequence_item req;
     req = bmu_sequence_item::type_id::create("req");
-      
-    // ==================== Randomized Testing ===================
-    `uvm_info(get_type_name(), "[Randomized Tests] Normal CPOP operation", UVM_LOW);
+    
+    // =============================================================================================================
+    // ==================== Randomized Testing =====================================================================
+    // =============================================================================================================
+    
     // Normal CPOP operations with random inputs
+    `uvm_info(get_type_name(), "[Randomized Tests] Normal CPOP operation", UVM_LOW);
     repeat(20)begin
       start_item(req);
       void'(req.randomize() with {
@@ -25,19 +28,10 @@ task body();
       req.ap.cpop = 1;
       finish_item(req);
     end
-
-    // Add idle cycles to ensure all transactions from previous test are completed
-    // repeat(1) begin
-    //   start_item(req);
-    //   req.rst_l = 1;
-    //   req.scan_mode = 0;
-    //   req.valid_in = 0;  // No valid transaction - idle cycle
-    //   req.csr_ren_in = 0;
-    //   req.ap = 0;
-    //   finish_item(req);
-    // end
     
-    // ==================== Directed Testing for Edge Cases ===================
+    // =============================================================================================================
+    // ==================== Directed Testing =======================================================================
+    // =============================================================================================================
     
     // Directed Test 1: All zeros - should return 0
     `uvm_info(get_type_name(), "[Directed Test 1] CPOP: All zeros", UVM_LOW);
