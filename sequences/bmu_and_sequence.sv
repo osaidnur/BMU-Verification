@@ -53,7 +53,6 @@ task body();
 
     // Directed Test 1: AND operation with all bits set to 1
     `uvm_info(get_type_name(), "[Directed Test 1]: AND with all bits set to 1", UVM_LOW);
-    // req.rst_l = 1;
     req.scan_mode = 0;
     req.valid_in = 1;
     req.csr_ren_in = 0;
@@ -66,7 +65,6 @@ task body();
         
     // Directed Test 2: AND operation with all bits set to 0
     `uvm_info(get_type_name(), "[Directed Test 2]: AND with all bits set to 0", UVM_LOW);
-    // req.rst_l = 1;
     req.scan_mode = 0;
     req.valid_in = 1;
     req.csr_ren_in = 0;
